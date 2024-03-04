@@ -12,8 +12,8 @@ resnet = InceptionResnetV1(pretrained='vggface2').eval()
 def load_embeddings():
     embeddings = []
     labels = []
-    for file in os.listdir('dataset'):
-        embedding = np.load(os.path.join('dataset', file))
+    for file in os.listdir('./dataset'):
+        embedding = np.load(os.path.join('./dataset', file))
         label = int(file.split('_')[-1].split('.')[0])  
         embeddings.append(embedding)
         labels.append(label)

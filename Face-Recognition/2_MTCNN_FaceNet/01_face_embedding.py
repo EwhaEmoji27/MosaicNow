@@ -14,7 +14,7 @@ mtcnn = MTCNN(keep_all=True)
 resnet = InceptionResnetV1(pretrained='vggface2').eval()
 
 # 데이터셋 저장 경로
-dataset_path = 'dataset'
+dataset_path = os.path.join('.', 'dataset')
 create_directory(dataset_path)
 
 # 사용자 ID 입력
