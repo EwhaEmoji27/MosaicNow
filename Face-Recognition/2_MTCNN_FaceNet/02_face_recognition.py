@@ -8,12 +8,16 @@ import os
 mtcnn = MTCNN(keep_all=True)
 resnet = InceptionResnetV1(pretrained='vggface2').eval()
 
+# 데이터셋 저장 경로
+script_directory = os.path.dirname(os.path.abspath(__file__))
+dataset_path = os.path.join(script_directory, 'dataset')
+
 # 저장된 임베딩 로드
 def load_embeddings():
     embeddings = []
     labels = []
-    for file in os.listdir('./dataset'):
-        embedding = np.load(os.path.join('./dataset', file))
+    for file in os.listdir(dataset_path):
+        embedding = np.load(os.path.join(dataset_path, file))
         label = int(file.split('_')[-1].split('.')[0])  
         embeddings.append(embedding)
         labels.append(label)

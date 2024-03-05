@@ -4,8 +4,11 @@ import torch
 import numpy as np
 import os
 
-# YOLOv5 모델 로드
-model = torch.hub.load('./yolov5', 'custom', path='./face_detection_yolov5s.pt', source='local')
+# 모델 로드
+script_dir = os.path.dirname(os.path.abspath(__file__))
+yolov5_path = os.path.join(script_dir, 'yolov5')
+model_path = os.path.join(script_dir, 'face_detection_yolov5s.pt')
+model = torch.hub.load(yolov5_path, 'custom', path=os.path.join(script_dir, model_path), source='local')
 
 # 디렉토리 생성 함수
 def create_directory(directory):
@@ -16,7 +19,7 @@ def create_directory(directory):
 resnet = InceptionResnetV1(pretrained='vggface2').eval()
 
 # 데이터셋 저장 경로
-dataset_path = os.path.join('.', 'dataset')
+dataset_path = os.path.join(script_dir, 'dataset')
 create_directory(dataset_path)
 
 # 사용자 ID 입력
