@@ -60,8 +60,17 @@ while True:
 # 모든 임베딩의 평균 계산
 if embeddings:
     average_embedding = np.mean(embeddings, axis=0)
+
+      # 사용자 ID별 폴더 생성
+    user_folder = os.path.join(dataset_path, f"user_{user_id}")
+    create_directory(user_folder)
+
     # 평균 임베딩 저장
-    np.save(os.path.join(dataset_path, f"user_{user_id}.npy"), average_embedding)
+    files = [f for f in os.listdir(user_folder) if f.endswith('.npy')]
+    next_file_number = len(files) + 1
+    filename = os.path.join(user_folder, f"{next_file_number}.npy")
+    np.save(filename, average_embedding)
+    
 
 cap.release()
 cv2.destroyAllWindows()
