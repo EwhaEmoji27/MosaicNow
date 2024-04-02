@@ -1,0 +1,125 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #c1bcea; /* 보라색 배경 설정 */
+}
+
+.App {
+  display: flex;
+  flex-direction: column; /* 자식 요소들을 세로 방향으로 나열 */
+  align-items: center; /* 가로 방향의 중앙 정렬 유지 */
+  min-height: 100vh; /* 최소 높이를 뷰포트 높이의 100%로 설정 */
+}
+
+
+.ContentWrapper {
+  display: flex;
+  flex-direction: row; /* UserInfoPanel과 ContentArea를 가로 방향으로 배치 */
+  justify-content: space-between; /* 좌우 요소 사이의 간격을 최대로 설정 */
+  width: 100%;
+  max-width: 1200px;
+}
+
+.Top {
+
+  padding: 2.5%;
+
+  margin-bottom: 20px;
+}
+.UserInfoPanel {
+  display: flex;
+  background-color: #ffffff;
+  flex-basis: 20%;
+  padding: 20px 50px;
+  border: 2px solid #cdcdcd;
+  margin-left: 20px;
+  border-radius: 3%;
+  flex-direction: column;
+  align-items: center;
+}
+.usericon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /*background-color:#bfc2ed81;*/
+  width: 60%; 
+  height: 0;
+  padding-bottom: 60%;
+  border-radius: 50%;
+  border: 3px solid #cdcdcd;
+  position: relative;
+}
+
+.ContentArea {
+  position: relative; 
+  background-color: white;
+  width: 100%; 
+  height: 100%; 
+  padding: 30px; 
+  border: 2px solid #cdcdcd;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2%;
+}
+
+.Camera {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%; /* 비디오 너비를 부모에 맞춤 */
+  height: 80%; /* 비디오 높이를 부모에 맞춤 */
+}
+
+.user_icon{ /*그리드 써서 설정 아이콘이랑 7:1비율로 수정*/
+  position: absolute;
+  top: 10%;
+}
+
+.RegisteredUser{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 150%;
+  box-sizing: border-box;
+  background-color: #DBE1F0;
+  height: 6%;
+  margin-bottom: 10%;
+}
+.usermanagement /*이거도 그리드로 나눠야 할 듯 안해도 될지도*/
+{
+  width: 100%;
+  border: 2px solid #cdcdcd;
+  height: 55%;
+  margin-bottom: 15%;
+}
+
+.username{
+  width: 100%; 
+  height: 10%;
+  background-color: #e6eaf5;
+  border: 2px solid #BFC2ED;
+  margin-bottom: 10%;
+
+}
+
+.userplus{
+  display: flex;
+  width: 100%; 
+  align-items: center;
+  justify-content: center;
+  border: solid #c1bcea;
+  height: 10%;
+}
+
+.startButton{
+  display: flex;
+  width: 100%;
+  border: 1px solid #c1bcea;
+  align-items: center;
+  justify-content: center;
+  background-color: #BFC2ED;
+  padding: 2%;
+}
+
