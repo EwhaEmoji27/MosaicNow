@@ -1,0 +1,31 @@
+.Top {
+    display: flex;
+    width: 100%;
+
+    justify-items: center;
+    align-items: center;
+    box-sizing: border-box; 
+    border: 2px solid black;
+}
+
+.top-left, .top-center, .top-right {
+
+    width: 33%;
+    padding: 15px;
+    border: 2px solid white;
+    box-sizing: border-box; 
+    display: flex;
+    justify-content: center;
+    
+    
+}
+
+.top-center .homeButton {
+    border: 2px solid black;
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    text-decoration: none;
+    color: black;
+    border-radius: 4px;
+    box-sizing: border-box; 
+}

@@ -20,31 +20,52 @@ body {
   max-width: 1200px;
 }
 
-.Top {
 
-  padding: 2.5%;
-
-  margin-bottom: 20px;
-}
 .UserInfoPanel {
   display: flex;
   background-color: #ffffff;
-  flex-basis: 20%;
-  padding: 20px 50px;
+  flex-basis: 30%;
+  padding-bottom: 20px;
   border: 2px solid #cdcdcd;
   margin-left: 20px;
   border-radius: 3%;
   flex-direction: column;
   align-items: center;
 }
+.UserInfo_top{
+  width: 100%;
+  display: grid;
+  height: 15%;
+  grid-template-columns: 1fr 1fr 1fr;
+  /*display: flex;
+  justify-content: center;*/
+  border: 2px solid red;
+  
+}
+.emptybox{
+  border: 3px solid #cdcdcd;
+}
+.usericon_box{
+  border: 3px solid green;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.gosetup{
+  border: 3px solid #cdcdcd;
+
+
+  
+}
+
 .usericon{
   display: flex;
   justify-content: center;
   align-items: center;
   /*background-color:#bfc2ed81;*/
-  width: 60%; 
+  width: 100%; 
   height: 0;
-  padding-bottom: 60%;
+  padding-bottom: 100%;
   border-radius: 50%;
   border: 3px solid #cdcdcd;
   position: relative;
@@ -81,7 +102,7 @@ body {
   align-items: center;
   justify-content: center;
 
-  width: 150%;
+  width: 100%;
   box-sizing: border-box;
   background-color: #DBE1F0;
   height: 6%;
@@ -90,7 +111,7 @@ body {
 .usermanagement /*이거도 그리드로 나눠야 할 듯 안해도 될지도*/
 {
   width: 100%;
-  border: 2px solid #cdcdcd;
+  border: 5px solid #cdcdcd;
   height: 55%;
   margin-bottom: 15%;
 }
@@ -100,7 +121,7 @@ body {
   height: 10%;
   background-color: #e6eaf5;
   border: 2px solid #BFC2ED;
-  margin-bottom: 10%;
+  margin-bottom: 4%;
 
 }
 
@@ -123,3 +144,10 @@ body {
   padding: 2%;
 }
 
+#al{
+  margin: auto 0 0 auto;
+  display: flex;
+  justify-content: end;
+  
+  border: 2px solid black;
+}
