@@ -3,7 +3,7 @@ import React from 'react';
 import Top from './Top';
 import UserInfoPanel from './UserInfoPanel';
 import ContentArea from './ContentArea';
-import Setup from '../Setup/Setup';
+
 import './App.css';
 
 function HomePage() {

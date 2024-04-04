@@ -1,19 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // Link 컴포넌트를 임포트합니다.
 import './Top.css'; 
+import HomeImage from'./img/Home.png'
 
 function Top() {
    return(
-    <div className='Top'>상단바 대용
+    <div className='Top'>
         <div className='top-left'></div>
             <nav>
                 <ul>
                 <li>
-                    <div className='top-center'><Link to="http://localhost:3000/" className="homeButton"><strong>HOME</strong></Link></div>
+                    <Link to="http://localhost:3000/" className="homeButton">
+                        <img src={HomeImage} alt="Home"/>
+                    </Link>
                 </li>
                 </ul>
             </nav>
-        <div className='top-right'></div>
+        <div className='top-right'>  </div>
+
     </div>
   
     

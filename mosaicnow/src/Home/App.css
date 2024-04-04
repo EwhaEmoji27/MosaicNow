@@ -1,3 +1,8 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; 
+}
 body {
   margin: 0;
   padding: 0;
@@ -53,8 +58,7 @@ body {
 }
 .gosetup{
   border: 3px solid #cdcdcd;
-
-
+  width: 100%;
   
 }
 
@@ -111,9 +115,12 @@ body {
 .usermanagement /*이거도 그리드로 나눠야 할 듯 안해도 될지도*/
 {
   width: 100%;
-  border: 5px solid #cdcdcd;
+  border: 5px solid yellow;
   height: 55%;
   margin-bottom: 15%;
+  display: flex;
+  flex-direction: column;
+  
 }
 
 .username{
@@ -127,12 +134,13 @@ body {
 
 .userplus{
   display: flex;
-  width: 100%; 
   align-items: center;
   justify-content: center;
   border: solid #c1bcea;
   height: 10%;
 }
+
+
 
 .startButton{
   display: flex;
@@ -150,4 +158,18 @@ body {
   justify-content: end;
   
   border: 2px solid black;
+}
+
+.gosetup img{
+
+  display: flex;
+  max-width: 60%;
+  max-height: 60%;
+  margin-left: auto;
+  
+  border: 2px solid black;
+}
+
+ul {
+  list-style: none;
 }

@@ -1,0 +1,20 @@
+
+.SetupPage{
+    width: 100%;
+    height: 100%;
+    border: 2px solid red;
+}
+
+.SetupPage_info{
+    display: flex;
+    justify-content: center;
+    border: 2px solid yellow;
+    width: 100%;
+    height: 100%;
+}
+.background{
+    
+    background-color: white;
+    width: 80%;
+    height: 80%;
+}

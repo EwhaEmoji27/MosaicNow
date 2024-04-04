@@ -28,6 +28,14 @@ function Setup() {
         <div>
             <Top/>
         </div>
+        <div className='SetupPage_info'>
+          <div className='background'>
+            <div className ='userimg'>이미지</div>
+            <div className='userid'>아이디 출력</div>
+            <div className='userPW'>비밀번호 입력</div>
+            <div className='check'>비밀번호 확인</div>
+          </div>
+        </div>
     </div>
   );
 }

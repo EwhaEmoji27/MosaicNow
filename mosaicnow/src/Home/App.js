@@ -1,11 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Route,Routes, Link } from 'react-router-dom';
-import Top from './Top';
-import UserInfoPanel from './UserInfoPanel';
-import ContentArea from './ContentArea';
+import { BrowserRouter as Router, Route,Routes } from 'react-router-dom';
+
 import './App.css';
 import HomePage from './HomePage';
 import Setup from '../Setup/Setup';
+import Adduser from '../UserManagement/Adduser';
 
 
 function App(){
@@ -14,7 +13,7 @@ function App(){
         <Routes>
           <Route path='/' element={<HomePage/>} />
           <Route path='/setup' element={<Setup/>}/>
-
+          <Route path = '/adduser' element={<Adduser/>}/>
         </Routes>
 
 
