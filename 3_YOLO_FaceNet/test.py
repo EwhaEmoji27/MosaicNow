@@ -246,8 +246,9 @@ def set_streaming():
                 '-vcodec', 'mjpeg',
                 '-s', '640x480',
                 '-i', '-',
-                '-f', 'lavfi',
-                '-i', 'anullsrc=r=44100:cl=stereo',  # Dummy audio generation   -> audio=마이크(HCAM01Q)
+                '-f', 'dshow',
+                '-rtbufsize', '5120000',
+                '-i', 'audio=Microphone Array(Intel® Smart Sound Technology for Digital Microphones)',  # Dummy audio generation   -> audio=마이크(HCAM01Q)
                 '-acodec', 'aac',
                 '-ar', '44100',
                 '-ac', '2',
@@ -380,4 +381,4 @@ def start_streaming():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
