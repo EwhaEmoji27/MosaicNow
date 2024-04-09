@@ -2,36 +2,50 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Webcam Stream Capture and Display</title>
+    <link rel="stylesheet" href="add_user.css" />
+    <title>MosaicNow</title>
   </head>
   <body>
-    <video
-      id="videoElement"
-      autoplay="true"
-      width="640"
-      height="480"
-      style="display: none"
-    ></video>
+    <div class="video_background">
+      <video
+        id="videoElement"
+        autoplay="true"
+        width="640"
+        height="480"
+        style="display: none"
+      ></video>
+    </div>
     <!-- 처리 전 영상을 숨깁니다. -->
-    <canvas
-      id="canvasElement"
-      width="640"
-      height="480"
-      style="display: none"
-    ></canvas>
-    <img
-      id="resultImage"
-      src=""
-      alt="Processed Image"
-      style="max-width: 640px; display: none"
-    />
-    <!-- 처리 후 영상을 초기에 숨깁니다. -->
-    <button id="startAddButton">Start Add</button>
-    <button id="startProcessButton">Start Process</button>
-    <button id="setStreamingButton">Set Streaming</button>
-    <button id="startStreamingButton">Start Streaming</button>
+    <canvas id="canvasElement" width="640" height="480" style="display: none">
+    </canvas>
+    <div class="resultImageContainer">
+      <img
+        id="resultImage"
+        src=""
+        alt="Processed Image"
+        style="max-width: 640px"
+        ;
+      />
+    </div>
+    <!-- 여기 등록 버튼 누르면 안에 있는 txt를 데이터베이스로 전송해야 함 -->
+    <div class="input-container">
+      <label for="inputField">이름을 입력하세요:</label>
+      <input type="text" id="inputField" name="inputField" />
+      <button id="submitButton">등록</button>
+    </div>
 
     <script>
+      add_face();
+
+      document
+        .getElementById("submitButton")
+        .addEventListener("click", function () {
+          const inputFieldValue = document.getElementById("inputField").value;
+          // HTML 파일에서 받은 인풋 값을 JavaScript 변수에 저장
+          const userInput = inputFieldValue;
+          // JavaScript 변수를 React 애플리케이션의 상태로 업데이트
+          window.ReactNativeWebView.postMessage(userInput);
+        });
       const videoElement = document.getElementById("videoElement");
       const canvasElement = document.getElementById("canvasElement");
       const context = canvasElement.getContext("2d");
@@ -45,6 +59,7 @@
 
       let streamActive = false; // 스트림 활성화 상태를 나타내는 변수
       let frameCount = 0; // 전송된 프레임 수를 추적하는 변수
+      let capturing = false;
 
       function add_face() {
         navigator.mediaDevices
@@ -56,6 +71,7 @@
             captureFrameLoop_add();
             //startButton.style.display = 'none'; // Start 버튼을 숨깁니다.
             resultImage.style.display = "block"; // 처리 후 영상을 보여주기 시작합니다.
+            process_face();
           })
           .catch((error) => console.error(error));
       }
@@ -229,11 +245,6 @@
           })
           .catch((error) => console.error("Error:", error));
       }
-
-      startAddButton.addEventListener("click", add_face);
-      startProcessButton.addEventListener("click", process_face);
-      setStreamingButton.addEventListener("click", set_streaming);
-      startStreamingButton.addEventListener("click", start_streaming);
     </script>
   </body>
 </html>

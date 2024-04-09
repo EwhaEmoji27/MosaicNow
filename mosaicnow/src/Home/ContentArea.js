@@ -8,7 +8,6 @@
 //   const [frameCount, setFrameCount] = useState(0);
 //   const [resultImageSrc, setResultImageSrc] = useState('');
 
-
 //   const getUserMedia = () => {
 //     navigator.mediaDevices.getUserMedia({ video: true })
 //       .then(stream => {
@@ -85,28 +84,25 @@
 //   );
 // }
 
-
-  // Other functions (processFace, setStreaming, startStreaming) are omitted for brevity
-
-
-
+// Other functions (processFace, setStreaming, startStreaming) are omitted for brevity
 
 // 비디오만 되는 코드
- import React, { useRef, useEffect } from 'react';import './App.css';
-  
+import React, { useRef, useEffect } from "react";
+import "./App.css";
 
 function ContentArea() {
   const videoRef = useRef(null);
   useEffect(() => {
     if (navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => {
           // video 태그에 스트림 연결
           if (videoRef.current) {
             videoRef.current.srcObject = stream;
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error("카메라에 연결할 수 없습니다:", err);
         });
     }
@@ -116,7 +112,6 @@ function ContentArea() {
     <div className="ContentArea">
       <video className="Camera" ref={videoRef} autoPlay playsInline />
     </div>
-  ); 
-
+  );
 }
 export default ContentArea;
