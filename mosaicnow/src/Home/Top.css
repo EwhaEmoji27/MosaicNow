@@ -1,25 +1,24 @@
 .Top {
     display: flex;
     width: 100%;
-
     justify-items: center;
     align-items: center;
     box-sizing: border-box; 
-    border: 2px solid black;
+    /* border: 2px solid black; */
 }
 
 .top-left, .top-center, .top-right {
 
     flex-grow: 1;
     padding: 15px;
-    border: 2px solid white;
+    /* border: 2px solid white; */
     box-sizing: border-box;
   
 }
 
 .top-center{
     width: 100%;
-    background-color: black;
+    /* background-color: black; */
 }
 
 .top-center .homeButton img {

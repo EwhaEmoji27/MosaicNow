@@ -31,13 +31,21 @@ function UserInfoPanel() {
                 <ul>
                 <li>
                     <Link to="/Adduser" className="adduser" style={{ textDecoration: 'none' }}>
-                        <div className='userplus'><strong>+</strong></div>
+                        <div className='userplus_'><strong>+</strong></div>
                     </Link>
                 </li>
                 </ul>
                 </div>
             </div>
-            <div className='startButton'>미리보기</div>
+              
+            <button className='startButton'><a href="/video.html">
+                미리보기
+              </a>
+            </button>
+
+
+
+            
         
     </div>
   );

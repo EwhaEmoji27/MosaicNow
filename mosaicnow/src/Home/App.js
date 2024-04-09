@@ -15,8 +15,6 @@ function App(){
           <Route path='/setup' element={<Setup/>}/>
           <Route path = '/adduser' element={<Adduser/>}/>
         </Routes>
-
-
       </Router>
   )
 
