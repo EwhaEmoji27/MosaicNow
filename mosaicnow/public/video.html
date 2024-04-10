@@ -52,7 +52,7 @@
           .then((stream) => {
             videoElement.srcObject = stream;
             streamActive = true;
-            frameCount = 0; // 프레임 수 초기화
+
             captureFrameLoop_add();
             //startButton.style.display = 'none'; // Start 버튼을 숨깁니다.
             resultImage.style.display = "block"; // 처리 후 영상을 보여주기 시작합니다.

@@ -8,19 +8,32 @@ function Adduser() {
   const [inputFieldValue, setInputFieldValue] = useState("");
   const [streamActive, setStreamActive] = useState(false);
   const [capturing, setCapturing] = useState(false);
-  const [frameCount, setFrameCount] = useState(0);
+  const [frameCount, setFrameCount] = useState(1);
   const [resultImageUrl, setResultImageUrl] = useState(""); // 결과 이미지 URL 상태
   const navigate = useNavigate();
+  const [number, setNumber] = useState(0);
 
   useEffect(() => {
+    if (frameCount > 50) {
+      stopCapture();
+    }
+  }, [frameCount]);
+
+  const handleStartCamera = () => {
     addFace();
-  }, []);
+  };
+
+  const increaseNumber = () => {
+    // number의 값을 증가시키는 함수
+    setNumber(number + 1);
+  };
 
   useEffect(() => {
     if (resultImageUrl) {
       const resultImage = document.getElementById("resultImage");
       if (resultImage) {
         resultImage.style.display = "block";
+        setNumber(number + 1);
       }
     }
   }, [resultImageUrl]); // resultImageUrl이 변경될 때마다 실행
@@ -42,11 +55,11 @@ function Adduser() {
         const videoElement = document.getElementById("videoElement");
         videoElement.srcObject = stream;
         setStreamActive(true);
-        setFrameCount(0);
+
         captureFrameLoopAdd();
+
         const resultImage = document.getElementById("resultImage");
         resultImage.style.display = "block";
-        processFace();
       })
       .catch((error) => console.error(error));
   };
@@ -68,9 +81,17 @@ function Adduser() {
     );
     canvasElement.toBlob((blob) => {
       sendFrameAdd(blob);
-      setFrameCount(frameCount + 1);
+      Counter();
     }, "image/jpeg");
-    setTimeout(captureFrameLoopAdd, 100);
+
+    setTimeout(captureFrameLoopAdd, 1500);
+  };
+
+  const Counter = () => {
+    setFrameCount(frameCount + 1);
+    console.log("here!");
+    console.log(frameCount);
+    increaseNumber();
   };
 
   const stopCapture = () => {
@@ -98,6 +119,8 @@ function Adduser() {
       .then((blob) => {
         const url = URL.createObjectURL(blob);
         setResultImageUrl(url); // 결과 이미지 URL 설정
+        console.log(frameCount);
+        setFrameCount((prevFrameCount) => prevFrameCount + 1);
         console.log("Result Image URL:", url); // URL 로그 확인
       })
       .catch((error) => console.error("Error:", error));
@@ -160,6 +183,7 @@ function Adduser() {
 
   return (
     <div>
+      <div>{number}</div>
       <div className="video_background">
         <video
           id="videoElement"
@@ -195,6 +219,7 @@ function Adduser() {
         <button id="submitButton" onClick={handleSubmit}>
           등록
         </button>
+        <button onClick={handleStartCamera}>카메라 시작</button>
       </div>
     </div>
   );

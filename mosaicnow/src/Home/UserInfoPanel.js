@@ -49,6 +49,9 @@ function UserInfoPanel({ onPreviewClick, userInput, handleInputChange }) {
       <button onClick={onPreviewClick} className="startButton">
         미리보기
       </button>
+      <a href="/video.html">
+        <button className="startButton">html 코드</button>
+      </a>
     </div>
   );
 }
