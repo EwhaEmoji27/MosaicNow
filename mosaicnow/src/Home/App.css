@@ -1,7 +1,7 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 body {
   margin: 0;
@@ -16,15 +16,14 @@ body {
   min-height: 100vh; /* 최소 높이를 뷰포트 높이의 100%로 설정 */
 }
 
-
 .ContentWrapper {
   display: flex;
   flex-direction: row; /* UserInfoPanel과 ContentArea를 가로 방향으로 배치 */
   justify-content: space-between; /* 좌우 요소 사이의 간격을 최대로 설정 */
-  width: 100%;
+  width: 120%;
   max-width: 1200px;
+  /*border: 3px solid black;*/
 }
-
 
 .UserInfoPanel {
   display: flex;
@@ -37,7 +36,7 @@ body {
   flex-direction: column;
   align-items: center;
 }
-.UserInfo_top{
+.UserInfo_top {
   width: 100%;
   display: grid;
   height: 15%;
@@ -45,29 +44,28 @@ body {
   /*display: flex;
   justify-content: center;*/
   /* border: 2px solid red; */
-  
+  border: 3px black;
 }
 /* .emptybox{
   border: 3px solid #cdcdcd;
 } */
-.usericon_box{
+.usericon_box {
   /* border: 3px solid green; */
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.gosetup{
+.gosetup {
   /* border: 3px solid #cdcdcd; */
   width: 100%;
-  
 }
 
-.usericon{
+.usericon {
   display: flex;
   justify-content: center;
   align-items: center;
   /*background-color:#bfc2ed81;*/
-  width: 100%; 
+  width: 100%;
   height: 0;
   padding-bottom: 100%;
   border-radius: 50%;
@@ -76,12 +74,12 @@ body {
 }
 
 .ContentArea {
-  position: relative; 
+  position: relative;
   background-color: white;
-  width: 100%; 
-  height: 100%; 
-  padding: 30px; 
-  /* border: 2px solid #cdcdcd; */
+  width: 100%;
+  height: 100%;
+  padding: 30px;
+  border: 2px solid #cdcdcd;
   justify-content: center;
   align-items: center;
   border-radius: 2%;
@@ -96,24 +94,24 @@ body {
   height: 80%; /* 비디오 높이를 부모에 맞춤 */
 }
 
-.user_icon{ /*그리드 써서 설정 아이콘이랑 7:1비율로 수정*/
+.user_icon {
+  /*그리드 써서 설정 아이콘이랑 7:1비율로 수정*/
   position: absolute;
   top: 10%;
 }
 
-.RegisteredUser{
+.RegisteredUser {
   display: flex;
   align-items: center;
   justify-content: center;
 
   width: 100%;
   box-sizing: border-box;
-  background-color: #DBE1F0;
+  background-color: #dbe1f0;
   height: 6%;
   margin-bottom: 10%;
 }
-.usermanagement /*이거도 그리드로 나눠야 할 듯 안해도 될지도*/
-{
+.usermanagement /*이거도 그리드로 나눠야 할 듯 안해도 될지도*/ {
   width: 100%;
   /* border: 5px solid yellow; */
   height: 55%;
@@ -121,20 +119,18 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  
 }
 
-.username{
-  width: 80%; 
+.username {
+  width: 80%;
   height: 10%;
   /* border-radius: 10%; */
   background-color: #e6eaf5;
   /* border: 2px solid #BFC2ED; */
   margin-bottom: 4%;
-
 }
 
-.userplus{
+.userplus {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -144,28 +140,25 @@ body {
   width: 80%;
 }
 
-
-
-.startButton{
+.startButton {
   display: flex;
   width: 100%;
   /* border: 1px solid #c1bcea; */
   align-items: center;
   justify-content: center;
-  background-color: #BFC2ED;
+  background-color: #bfc2ed;
   padding: 2%;
 }
 
-#al{
+#al {
   margin: auto 0 0 auto;
   display: flex;
   justify-content: end;
-  
+
   /* border: 2px solid black; */
 }
 
-.gosetup img{
-
+.gosetup img {
   display: flex;
   max-width: 60%;
   max-height: 60%;

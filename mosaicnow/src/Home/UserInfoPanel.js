@@ -37,9 +37,6 @@ function UserInfoPanel({ onPreviewClick, userInput, handleInputChange }) {
 
         <div className="username"></div>
         <button className="userplus">
-          <div className="adduser">
-            <a href="/add_user.html">+</a>
-          </div>
           <Link to="/adduser" className="adduser">
             <div>+</div>
           </Link>
