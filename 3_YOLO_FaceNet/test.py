@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file, render_template
+from flask import Flask, request, redirect, jsonify, send_file, render_template
 from flask_cors import CORS
 import cv2
 from facenet_pytorch import InceptionResnetV1
@@ -7,6 +7,7 @@ import numpy as np
 import os
 import tempfile
 import subprocess
+import ssl
 
 
 
@@ -56,6 +57,8 @@ def apply_mosaic(frame, top_left, bottom_right, factor=0.1):
     mosaic = cv2.resize(mosaic, (x2-x1, y2-y1), interpolation=cv2.INTER_NEAREST)
     frame[y1:y2, x1:x2] = mosaic
     return frame
+
+
 
 
 
@@ -380,5 +383,13 @@ def start_streaming():
 
 
 
+#if __name__ == '__main__':
+#    app.run(debug=True, host='0.0.0.0', port=5000)
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(port=5000, host='0.0.0.0')
+
+#if __name__ == "__main__":
+#    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+#    ssl_context.load_cert_chain(certfile='newcert.pem', keyfile='newkey.pem', password='secret')
+#    app.run(host="0.0.0.0", port=5000, ssl_context=ssl_context)

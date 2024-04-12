@@ -1,228 +1,94 @@
-// App.js
+import React, { useState, useEffect, useRef } from 'react';
 
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./Adduser.css";
-
-function Adduser() {
-  const [inputFieldValue, setInputFieldValue] = useState("");
+const WebcamStreamCapture = () => {
+  const videoElement = useRef(null);
+  const canvasElement = useRef(null);
   const [streamActive, setStreamActive] = useState(false);
-  const [capturing, setCapturing] = useState(false);
-  const [frameCount, setFrameCount] = useState(1);
-  const [resultImageUrl, setResultImageUrl] = useState(""); // 결과 이미지 URL 상태
-  const navigate = useNavigate();
-  const [number, setNumber] = useState(0);
+  const [frameCount, setFrameCount] = useState(0);
+  const [resultImageUrl, setResultImageUrl] = useState('');
+  const timerIdRef = useRef(null); // setTimeout의 ID를 저장하기 위한 ref
 
   useEffect(() => {
+    console.log(frameCount);
+    // frameCount가 변경될 때마다 이를 확인하고 필요에 따라 멈춥니다.
     if (frameCount > 50) {
       stopCapture();
     }
   }, [frameCount]);
 
-  const handleStartCamera = () => {
-    addFace();
-  };
-
-  const increaseNumber = () => {
-    // number의 값을 증가시키는 함수
-    setNumber(number + 1);
-  };
-
   useEffect(() => {
-    if (resultImageUrl) {
-      const resultImage = document.getElementById("resultImage");
-      if (resultImage) {
-        resultImage.style.display = "block";
-        setNumber(number + 1);
+    // streamActive 상태가 false가 되면 예약된 모든 setTimeout 호출을 취소
+    return () => {
+      if (timerIdRef.current) {
+        clearTimeout(timerIdRef.current);
       }
-    }
-  }, [resultImageUrl]); // resultImageUrl이 변경될 때마다 실행
-  const handleInputChange = (event) => {
-    setInputFieldValue(event.target.value);
-  };
+    };
+  }, [streamActive]);
 
-  const handleSubmit = () => {
-    console.log("button");
-    const userInput = inputFieldValue;
-    console.log("Submitted:", userInput);
-    navigate("/"); // 등록 후 homepage로 이동
-  };
-
-  const addFace = () => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then((stream) => {
-        const videoElement = document.getElementById("videoElement");
-        videoElement.srcObject = stream;
+  const add_face = () => {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        if (videoElement.current) videoElement.current.srcObject = stream;
         setStreamActive(true);
-
-        captureFrameLoopAdd();
-
-        const resultImage = document.getElementById("resultImage");
-        resultImage.style.display = "block";
+        setFrameCount(0);
+        captureFrameLoop_add();
       })
-      .catch((error) => console.error(error));
+      .catch(error => console.error(error));
   };
 
-  const captureFrameLoopAdd = () => {
-    if (!streamActive || frameCount > 50) {
-      stopCapture();
-      return;
+  const captureFrameLoop_add = () => {
+    if (!streamActive) return;
+
+    if (canvasElement.current && videoElement.current) {
+      const context = canvasElement.current.getContext('2d');
+      context.drawImage(videoElement.current, 0, 0, canvasElement.current.width, canvasElement.current.height);
+      canvasElement.current.toBlob(blob => {
+        sendFrame_add(blob);
+        setFrameCount(prevCount => prevCount + 1);
+      }, 'image/jpeg');
+
+      // setTimeout을 설정하고, 반환된 ID를 timerIdRef에 저장
+      timerIdRef.current = setTimeout(captureFrameLoop_add, 100);
     }
-    const videoElement = document.getElementById("videoElement");
-    const canvasElement = document.getElementById("canvasElement");
-    const context = canvasElement.getContext("2d");
-    context.drawImage(
-      videoElement,
-      0,
-      0,
-      canvasElement.width,
-      canvasElement.height
-    );
-    canvasElement.toBlob((blob) => {
-      sendFrameAdd(blob);
-      Counter();
-    }, "image/jpeg");
-
-    setTimeout(captureFrameLoopAdd, 1500);
   };
 
-  const Counter = () => {
-    setFrameCount(frameCount + 1);
-    console.log("here!");
-    console.log(frameCount);
-    increaseNumber();
+  const sendFrame_add = (blob) => {
+    let formData = new FormData();
+    formData.append('user_id', 1);
+    formData.append('frame', blob, 'frame.jpg');
+    fetch('http://127.0.0.1:5000/add_face', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.blob())
+    .then(blob => {
+      setResultImageUrl(URL.createObjectURL(blob));
+    })
+    .catch(error => console.error('Error:', error));
   };
 
   const stopCapture = () => {
-    if (streamActive) {
-      const videoElement = document.getElementById("videoElement");
-      const tracks = videoElement.srcObject.getTracks();
-      tracks.forEach((track) => track.stop());
+    if (streamActive && videoElement.current && videoElement.current.srcObject) {
+      const tracks = videoElement.current.srcObject.getTracks();
+      tracks.forEach(track => track.stop());
       setStreamActive(false);
-      setCapturing(false);
-      videoElement.srcObject = null;
+      videoElement.current.srcObject = null;
       console.log("Streaming and capturing stopped.");
+      if (timerIdRef.current) {
+        clearTimeout(timerIdRef.current);
+      }
     }
-  };
-
-  const sendFrameAdd = (blob) => {
-    console.log("sendFramAdd start");
-    const formData = new FormData();
-    formData.append("user_id", 1);
-    formData.append("frame", blob, "frame.jpg");
-    fetch("http://127.0.0.1:5000/add_face", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = URL.createObjectURL(blob);
-        setResultImageUrl(url); // 결과 이미지 URL 설정
-        console.log(frameCount);
-        setFrameCount((prevFrameCount) => prevFrameCount + 1);
-        console.log("Result Image URL:", url); // URL 로그 확인
-      })
-      .catch((error) => console.error("Error:", error));
-  };
-
-  const processFace = () => {
-    if (!streamActive) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then((stream) => {
-          const videoElement = document.getElementById("videoElement");
-          videoElement.srcObject = stream;
-          setStreamActive(true);
-          setCapturing(true);
-          captureFrameLoopProcess();
-          const resultImage = document.getElementById("resultImage");
-          resultImage.style.display = "block";
-        })
-        .catch((error) => console.error(error));
-    } else if (capturing) {
-      stopCapture();
-    }
-  };
-
-  const captureFrameLoopProcess = () => {
-    if (!streamActive || !capturing) {
-      return;
-    }
-    const videoElement = document.getElementById("videoElement");
-    const canvasElement = document.getElementById("canvasElement");
-    const context = canvasElement.getContext("2d");
-    context.drawImage(
-      videoElement,
-      0,
-      0,
-      canvasElement.width,
-      canvasElement.height
-    );
-    canvasElement.toBlob((blob) => {
-      sendFrameProcess(blob);
-    }, "image/jpeg");
-    setTimeout(captureFrameLoopProcess, 100);
-  };
-
-  const sendFrameProcess = (blob) => {
-    const formData = new FormData();
-    formData.append("user_id", "1");
-    formData.append("selected_user_ids[]", 1);
-    formData.append("frame", blob, ["frame.jpg"]);
-    fetch("http://127.0.0.1:5000/process_face", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.blob())
-      .then((blob) => {
-        setResultImageUrl(URL.createObjectURL(blob));
-      })
-      .catch((error) => console.error("Error:", error));
   };
 
   return (
     <div>
-      <div>{number}</div>
-      <div className="video_background">
-        <video
-          id="videoElement"
-          autoPlay={true}
-          width="640"
-          height="480"
-          style={{ display: "none" }}
-        ></video>
-      </div>
-      <canvas
-        id="canvasElement"
-        width="640"
-        height="480"
-        style={{ display: "none" }}
-      ></canvas>
-      <div className="resultImageContainer">
-        <img
-          id="resultImage"
-          src={resultImageUrl}
-          alt="Processed Image"
-          style={{ maxWidth: "640px" }}
-        />
-      </div>
-      <div className="input-container">
-        <label htmlFor="inputField">이름을 입력하세요:</label>
-        <input
-          type="text"
-          id="inputField"
-          name="inputField"
-          value={inputFieldValue}
-          onChange={handleInputChange}
-        />
-        <button id="submitButton" onClick={handleSubmit}>
-          등록
-        </button>
-        <button onClick={handleStartCamera}>카메라 시작</button>
-      </div>
+      <video ref={videoElement} autoPlay={true} width="640" height="480" style={{ display: 'none' }}></video>
+      <canvas ref={canvasElement} width="640" height="480" style={{ display: 'none' }}></canvas>
+      <img src={resultImageUrl} alt="Processed Image" style={{ maxWidth: '640px', display: resultImageUrl ? 'block' : 'none' }} />
+      <button onClick={add_face}>Start Add</button>
+      {/* 필요한 경우 여기에 추가 버튼을 구현합니다. */}
     </div>
   );
-}
+};
 
-export default Adduser;
+export default WebcamStreamCapture;
