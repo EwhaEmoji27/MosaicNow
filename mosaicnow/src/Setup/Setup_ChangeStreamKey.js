@@ -1,17 +1,15 @@
-/*확인 눌렀을 때 비밀번호 같으면 스트리밍키 입력으로*/
-
 import React from "react";
 import Top from "../Home/Top";
-import "./Setup.css";
+import "./Setup_ChangeStreamKey.css";
 import usericon from "../Home/img/user_icon.png";
-
-function Setup() {
+import { Link } from "react-router-dom";
+function Setup_ChangeStreamKey() {
   return (
-    <div className="SetupPage" style={{ height: "100%" }}>
-      <div>
+    <div className="Setup_Page" style={{ height: "100%" }}>
+      <div className="Top">
         <Top />
       </div>
-      <div>두 번째 페이지 입니다</div>
+
       <div className="SetupPage_info">
         <div className="back">
           <div className="usericon_setup">
@@ -20,15 +18,21 @@ function Setup() {
           <div>아이디</div>
           <div className="input_and_check">
             <div className="pw_check">
+              <div className="input_STK">여기에 스트림키 입력</div>
+
               <button className="Change_StreamKey">스트림키 변경</button>
-              <button className="Change_PW">비밀번호 변경</button>
+
+              <Link to="/">
+                <button className="GOHome">확인 누르면 홈으로 가야 함</button>
+              </Link>
             </div>
-            <button className="check">확인</button>
           </div>
+
+          <button className="check">확인</button>
         </div>
       </div>
     </div>
   );
 }
 
-export default Setup;
+export default Setup_ChangeStreamKey;

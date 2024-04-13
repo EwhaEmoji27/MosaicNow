@@ -9,7 +9,8 @@ import "./App.css";
 
 function HomePage() {
   const [isPreviewing, setIsPreviewing] = useState(false);
-  const [userInput, setUserInput] = useState(""); // 사용자 입력 값을 상태로 관리
+  const [contentAreaState, setContentAreaState] = useState(0); // 함수 컴포넌트에서 상태 관리 방식
+  const [userInput, setUserInput] = useState("");
 
   const handlePreviewClick = () => {
     setIsPreviewing(true);
@@ -17,7 +18,7 @@ function HomePage() {
 
   const handleAddUser = (input) => {
     // 사용자가 등록 버튼을 눌렀을 때 실행되는 함수
-    // input은 HTML 파일에서 받은 인풋 값입니다.
+    // input은 HTML 파일에서 받은 인풋 값
     setUserInput(input); // 입력 값 업데이트
   };
 
@@ -36,12 +37,9 @@ function HomePage() {
       </div>
 
       <div className="ContentWrapper">
-        {isPreviewing ? <ProcessFace /> : <ContentArea />}
+        <ContentArea />
 
-        <UserInfoPanel
-          onPreviewClick={handlePreviewClick}
-          userInput={userInput}
-        />
+        <UserInfoPanel />
       </div>
     </div>
   );

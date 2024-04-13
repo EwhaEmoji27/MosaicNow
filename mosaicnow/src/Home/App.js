@@ -5,6 +5,7 @@ import "./App.css";
 import HomePage from "./HomePage";
 import Setup from "../Setup/Setup";
 import Adduser from "../AddUser/AddUser";
+import Setup_ChangeStreamKey from "../Setup/Setup_ChangeStreamKey";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/setup" element={<Setup />} />
         <Route path="/adduser" element={<Adduser />} />
+        <Route path="/setup_stk" element={<Setup_ChangeStreamKey />} />
       </Routes>
     </Router>
   );

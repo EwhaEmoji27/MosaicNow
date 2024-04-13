@@ -26,9 +26,10 @@ function UserInfoPanel({ onPreviewClick, userInput, handleInputChange }) {
           </p>
         </div>
       </div>
-      <div>
-        <p>id:letgogogo </p>
-      </div>
+      <div className="this"></div>
+
+      <p className="id_text">id:letgogogo </p>
+
       <div className="RegisteredUser">
         &nbsp;&nbsp;등록된 사용자&nbsp;&nbsp;
       </div>
