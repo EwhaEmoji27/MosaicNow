@@ -39,11 +39,18 @@ function Setup({ toggleView }) {
           <div>아이디</div>
           <div className="input_and_check">
             <div className="pw_check">
-              <div className="pw_text">비밀번호 확인:</div>
-              <div className="input_PW">여기에 비밀번호 입력</div>
+              <div className="input_place_PW">
+                <input
+                  type="text"
+                  className="input_place"
+                  placeholder="비밀번호 확인"
+                />
+                {/*유라야 여기기 비밀번호 확인하는 인풋*/}
+              </div>
             </div>
 
             <button onClick={toggleView} className="check">
+              {/*유라야 여기서 비밀번호 확인*/}
               확인
             </button>
           </div>
@@ -71,7 +78,9 @@ function Setup_2ndStep() {
               <Link to="/setup_stk">
                 <button className="Change_StreamKey">스트림키 변경</button>
               </Link>
-              <button className="Change_PW">비밀번호 변경</button>
+              <Link to="/setup_pw">
+                <button className="Change_PW">비밀번호 변경</button>
+              </Link>
             </div>
           </div>
         </div>

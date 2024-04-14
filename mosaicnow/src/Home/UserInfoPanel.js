@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import usericon from "./img/user_icon.png";
 import setupicon from "./img/setup.png";
+import "../Home/App.css";
 
 function UserInfoPanel({ onPreviewClick, userInput, handleInputChange }) {
   return (
@@ -27,7 +28,7 @@ function UserInfoPanel({ onPreviewClick, userInput, handleInputChange }) {
         </div>
       </div>
       <div className="this"></div>
-
+      {/*유라야 여기야 여기서 id 받아서 출력해야 해*/}
       <p className="id_text">id:letgogogo </p>
 
       <div className="RegisteredUser">

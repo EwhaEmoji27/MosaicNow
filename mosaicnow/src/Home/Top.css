@@ -6,7 +6,7 @@
   justify-items: center;
   align-items: center;
   box-sizing: border-box;
-  border: 2px solid yellow;
+  /* border: 2px solid yellow;*/
 }
 
 .top-left,
@@ -14,7 +14,7 @@
 .top-right {
   flex-grow: 1;
   padding: 15px;
-  border: 2px solid white;
+  /*border: 2px solid white;*/
   box-sizing: border-box;
 }
 

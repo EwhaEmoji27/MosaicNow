@@ -44,7 +44,7 @@ body {
   /*display: flex;
   justify-content: center;*/
   /* border: 2px solid red; */
-  border: 3px black;
+  /*border: 3px black;*/
 }
 /* .emptybox{
   border: 3px solid #cdcdcd;
@@ -157,6 +157,7 @@ body {
   justify-content: center;
   background-color: #bfc2ed;
   padding: 2%;
+  border: 0;
 }
 
 #al {

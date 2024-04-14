@@ -1,0 +1,41 @@
+.Login_Join_all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  width: 20%;
+}
+
+.input_place_tohome,
+.input_place_tohome_PW {
+  height: 30px; /* 뷰포트 높이 단위(vh) 대신 고정 픽셀값 사용 */
+  width: 100%;
+  border: 2px solid #cdcdcd;
+  border-radius: 2%;
+  margin-top: 10px; /* 모든 입력 필드에 일관된 상단 마진 적용 */
+}
+.buttons_box {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  margin-top: 3vh;
+}
+.buttons_box a {
+  display: flex;
+  text-decoration: none;
+  color: inherit;
+  margin: 0 10px;
+}
+.check_to_home {
+  height: 3vh;
+  width: 4vh;
+}
+
+.check_to_join {
+  height: 3vh;
+  width: 8vh;
+}
