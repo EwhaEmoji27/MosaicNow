@@ -22,7 +22,7 @@ function Join() {
         />
       </div>
       <Link to="/home">
-        <button className="check_to_home">확인</button>
+        <button className="join_check_to_home">확인</button>
       </Link>
       {/*위에 버튼은 홈으로 가는 버튼임 만약 회원가입으로 간다면 아래*/}
     </div>
