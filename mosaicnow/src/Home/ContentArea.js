@@ -87,31 +87,105 @@
 // Other functions (processFace, setStreaming, startStreaming) are omitted for brevity
 
 // 비디오만 되는 코드
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useContext, useState, useEffect } from "react";
+import ImageContext from "../ImageContext/ImageContext";
 import "./App.css";
 
 function ContentArea() {
   const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const { resultImageUrl, setResultImageUrl } = useContext(ImageContext);
+  const [streamActive, setStreamActive] = useState(false);
+  const intervalRef = useRef(null);
+
   useEffect(() => {
-    if (navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then((stream) => {
-          // video 태그에 스트림 연결
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-          }
-        })
-        .catch((err) => {
-          console.error("카메라에 연결할 수 없습니다:", err);
+    const getUserMedia = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
         });
-    }
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          setStreamActive(true);
+        }
+      } catch (err) {
+        console.error("카메라에 연결할 수 없습니다:", err);
+        setStreamActive(false);
+      }
+    };
+
+    getUserMedia();
+
+    return () => {
+      if (videoRef.current && videoRef.current.srcObject) {
+        const tracks = videoRef.current.srcObject.getTracks();
+        tracks.forEach((track) => track.stop());
+        setStreamActive(false);
+      }
+    };
   }, []);
+
+  useEffect(() => {
+    if (streamActive) {
+      intervalRef.current = setInterval(captureAndSendFrame, 100);
+    } else {
+      clearInterval(intervalRef.current);
+    }
+
+    return () => clearInterval(intervalRef.current);
+  }, [streamActive]);
+
+  const captureAndSendFrame = () => {
+    if (!canvasRef.current || !videoRef.current) {
+      console.error("Canvas or video element is not ready.");
+      return;
+    }
+    const context = canvasRef.current.getContext("2d");
+    context.drawImage(
+      videoRef.current,
+      0,
+      0,
+      canvasRef.current.width,
+      canvasRef.current.height
+    );
+    canvasRef.current.toBlob(sendFrameAdd, "image/jpeg");
+  };
+
+  const sendFrameAdd = (blob) => {
+    let formData = new FormData();
+    formData.append("user_id", 1);
+    formData.append("selected_user_ids[]", 1);
+    formData.append("frame", blob, "frame.jpg");
+
+    fetch("http://127.0.0.1:5000/process_face", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.blob())
+      .then((blob) => {
+        const objectURL = URL.createObjectURL(blob);
+        setResultImageUrl(objectURL);
+      })
+      .catch((error) => console.error("Error:", error));
+  };
 
   return (
     <div className="ContentArea">
-      <video className="Camera" ref={videoRef} autoPlay playsInline />
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline
+        style={{ width: "640px", height: "480px" }}
+      />
+      <canvas
+        ref={canvasRef}
+        style={{ display: "none" }}
+        width="640"
+        height="480"
+      ></canvas>
+      {resultImageUrl && <img src={resultImageUrl} alt="Processed Image" />}
     </div>
   );
 }
+
 export default ContentArea;

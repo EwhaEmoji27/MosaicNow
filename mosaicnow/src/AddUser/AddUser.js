@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./Adduser.css";
 
-const WebcamStreamCapture = () => {
+const AddUser = () => {
   const videoElement = useRef(null);
   const canvasElement = useRef(null);
   const [streamActive, setStreamActive] = useState(false);
@@ -150,4 +150,4 @@ const WebcamStreamCapture = () => {
   );
 };
 
-export default WebcamStreamCapture;
+export default AddUser;
