@@ -175,7 +175,7 @@ function ContentArea() {
         ref={videoRef}
         autoPlay
         playsInline
-        style={{ width: "640px", height: "480px" }}
+        style={{ width: "640px", height: "480px", display: "none" }}
       />
       <canvas
         ref={canvasRef}

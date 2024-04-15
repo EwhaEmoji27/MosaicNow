@@ -35,6 +35,7 @@ function UserInfoPanel({ onPreviewClick, userInput, handleInputChange }) {
         &nbsp;&nbsp;등록된 사용자&nbsp;&nbsp;
       </div>
       <div className="usermanagement">
+        {/*유라야 추가 !! 여기에서 데이터베이스에 있는 유저 목록을 받아와서 유저 수에 맞게 출력해야 함 지금은 그냥 user div로 박아뒀음 */}
         <div className="username">user</div>
 
         <div className="username"></div>
@@ -46,7 +47,7 @@ function UserInfoPanel({ onPreviewClick, userInput, handleInputChange }) {
       </div>
 
       <button onClick={onPreviewClick} className="startButton">
-        미리보기
+        시작
       </button>
     </div>
   );

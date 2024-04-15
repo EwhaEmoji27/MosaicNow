@@ -97,7 +97,7 @@ const AddUser = () => {
   };
 
   const stopCapture = () => {
-    navigate("/");
+    navigate("/home");
     if (
       streamActive &&
       videoElement.current &&
