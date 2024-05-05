@@ -168,6 +168,7 @@ const HomePage = () => {
   const canvasRef = useRef(null);
   const { resultImageUrl, setResultImageUrl } = useContext(ImageContext);
   const [streamActive, setStreamActive] = useState(false);
+  const [resultImageVisible, setResultImageVisible] = useState(false);
   const intervalRef = useRef(null);
 
   useEffect(() => {
@@ -206,6 +207,12 @@ const HomePage = () => {
 
     return () => clearInterval(intervalRef.current);
   }, [streamActive]);
+
+  const handlePreviewClick = () => {
+    if (!streamActive) return;
+    setResultImageVisible(true);
+    captureAndSendFrame();
+  };
 
   const captureAndSendFrame = () => {
     if (!canvasRef.current || !videoRef.current) {
@@ -259,7 +266,9 @@ const HomePage = () => {
             width="640"
             height="480"
           ></canvas>
-          {resultImageUrl && <img src={resultImageUrl} alt="Processed Image" />}
+          {resultImageUrl && resultImageVisible && (
+            <img src={resultImageUrl} alt="Processed Image" />
+          )}
         </div>
         <div className="userbox">
           <div className="UserInfo_top">
@@ -294,6 +303,7 @@ const HomePage = () => {
             </button>
           </div>
           <button
+            onClick={handlePreviewClick}
             id="startProcessButton"
             style={{ height: "7%", width: "100%" }}
           >
