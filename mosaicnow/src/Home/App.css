@@ -62,18 +62,6 @@ body {
   width: 100%;
 }
 
-.usericon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /*background-color:#bfc2ed81;*/
-  width: 100%;
-  height: 0;
-  padding-bottom: 100%;
-  border-radius: 50%;
-  border: 3px solid #cdcdcd;
-  position: relative;
-}
 /*아이디 나오는 부분*/
 .this {
   height: 0.5%;

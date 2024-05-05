@@ -29,6 +29,7 @@ function Setup_ChangeStreamKey() {
             <Link to="/home">
               <button className="GOHome">확인</button>
             </Link>
+            {/*유라야 여기서 확인 누르면 스트림 키 수정해서 데이터베이스로 전송*/}
           </div>
         </div>
       </div>

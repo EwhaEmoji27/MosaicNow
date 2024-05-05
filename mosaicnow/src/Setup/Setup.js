@@ -45,12 +45,10 @@ function Setup({ toggleView }) {
                   className="input_place"
                   placeholder="비밀번호 확인"
                 />
-                {/*유라야 여기기 비밀번호 확인하는 인풋*/}
               </div>
             </div>
 
             <button onClick={toggleView} className="check">
-              {/*유라야 여기서 비밀번호 확인*/}
               확인
             </button>
           </div>
