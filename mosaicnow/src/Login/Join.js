@@ -5,6 +5,38 @@ import { Link } from "react-router-dom";
 import "./Login_Join.css";
 
 function Join() {
+  function submitForm() {
+    const id = document.getElementById("id").value;
+    const pw = document.getElementById("pw").value;
+
+    if (!id || !pw) {
+      alert("ID와 PW를 모두 입력하세요.");
+      return;
+    }
+
+    const data = { id, pw };
+
+    fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          window.location.href = "/home";
+        } else if (response.status === 401) {
+          alert("다시 시도해주세요!!");
+        } else {
+          throw new Error("Something went wrong on the server");
+        }
+      })
+      .catch((error) => {
+        console.error("Error occurred:", error);
+        alert("Error occurred. Please try again.");
+      });
+  }
   return (
     <div className="Login_Join_all">
       <div className="id_to_home">
