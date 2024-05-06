@@ -1,4 +1,10 @@
-import React, { useRef, useContext, useState, useEffect } from "react";
+import React, {
+  useRef,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import ImageContext from "../ImageContext/ImageContext";
 import { Link } from "react-router-dom";
 import usericon from "./img/user_icon.png";
@@ -170,6 +176,8 @@ const HomePage = () => {
   const [streamActive, setStreamActive] = useState(false);
   const [resultImageVisible, setResultImageVisible] = useState(false);
   const intervalRef = useRef(null);
+  const [buttonTxt, setbuttonTxt] = useState("미리보기");
+  const [buttonNum, setbuttonNum] = useState(0);
 
   useEffect(() => {
     const getUserMedia = async () => {
@@ -208,11 +216,26 @@ const HomePage = () => {
     return () => clearInterval(intervalRef.current);
   }, [streamActive]);
 
-  const handlePreviewClick = () => {
+  useEffect(() => {
+    console.log(buttonNum);
+  }, [buttonNum]);
+
+  const handlePreviewClick = useCallback(() => {
     if (!streamActive) return;
     setResultImageVisible(true);
     captureAndSendFrame();
-  };
+
+    if (buttonNum === 0) {
+      setbuttonTxt("시작하기");
+      setbuttonNum(1);
+    } else if (buttonNum === 1) {
+      setbuttonTxt("멈추기");
+      setbuttonNum(2);
+    } else if (buttonNum === 2) {
+      setbuttonTxt("미리보기");
+      setbuttonNum(0);
+    }
+  }, [streamActive, buttonNum]);
 
   const captureAndSendFrame = () => {
     if (!canvasRef.current || !videoRef.current) {
@@ -302,12 +325,13 @@ const HomePage = () => {
               </Link>
             </button>
           </div>
+
           <button
             onClick={handlePreviewClick}
             id="startProcessButton"
             style={{ height: "7%", width: "100%" }}
           >
-            미리보기
+            {buttonTxt}
           </button>
         </div>
       </div>
