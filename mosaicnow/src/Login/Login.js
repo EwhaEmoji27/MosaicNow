@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import "./Login_Join.css";
 
 function Login() {
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
+  const navigate = useNavigate();
 
   const submitForm = () => {
     if (!id || !pw) {
@@ -15,7 +16,7 @@ function Login() {
 
     const data = { id, pw };
 
-    fetch('/login', {
+    fetch('http://110.9.11.9:8000/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -24,9 +25,16 @@ function Login() {
     })
       .then(response => {
         if (response.status === 200) {
-          window.location.href = '/home';
+          response.json().then(data => {
+            const { userNum, userID } = data;
+            document.cookie = `userID=${userID}; path=/`;
+            document.cookie = `userNum=${userNum}; path=/`;
+            navigate('/home');
+          });
         } else if (response.status === 401) {
-          alert("다시 시도해주세요!!");
+          alert("ID 또는 비밀번호가 올바르지 않습니다.");
+        } else if (response.status === 500) {
+          throw new Error('Internal Server Error');
         } else {
           throw new Error('Something went wrong on the server');
         }

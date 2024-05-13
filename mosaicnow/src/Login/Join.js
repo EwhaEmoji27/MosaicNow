@@ -1,14 +1,14 @@
-import React from "react";
-
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import "./Login_Join.css";
 
 function Join() {
-  function submitForm() {
-    const id = document.getElementById("id").value;
-    const pw = document.getElementById("pw").value;
+  const [id, setId] = useState('');
+  const [pw, setPw] = useState('');
+  const navigate = useNavigate();
 
+  function submitForm() {
     if (!id || !pw) {
       alert("ID와 PW를 모두 입력하세요.");
       return;
@@ -16,7 +16,7 @@ function Join() {
 
     const data = { id, pw };
 
-    fetch("/login", {
+    fetch("http://110.9.11.9:8000/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -25,7 +25,7 @@ function Join() {
     })
       .then((response) => {
         if (response.status === 200) {
-          window.location.href = "/home";
+          navigate('/');
         } else if (response.status === 401) {
           alert("다시 시도해주세요!!");
         } else {
@@ -37,6 +37,7 @@ function Join() {
         alert("Error occurred. Please try again.");
       });
   }
+
   return (
     <div className="Login_Join_all">
       <div className="id_to_home">
@@ -44,19 +45,20 @@ function Join() {
           type="text"
           className="input_place_tohome"
           placeholder="아이디"
+          value={id}
+          onChange={(e) => setId(e.target.value)}
         />
       </div>
       <div>
         <input
-          type="text"
+          type="password"
           className="input_place_tohome_PW"
           placeholder="비밀번호"
+          value={pw}
+          onChange={(e) => setPw(e.target.value)}
         />
       </div>
-      <Link to="/home">
-        <button className="join_check_to_home">확인</button>
-      </Link>
-      {/*위에 버튼은 홈으로 가는 버튼임 만약 회원가입으로 간다면 아래*/}
+      <button className="join_check_to_home" onClick={submitForm}>확인</button>
     </div>
   );
 }

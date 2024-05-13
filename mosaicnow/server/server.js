@@ -1,15 +1,16 @@
-import express, { Request, Response, NextFunction } from "express";
-import path from "path";
-import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
-
+const express = require('express');
+const cors = require('cors'); 
+const path = require('path');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const mysql = require('mysql2/promise');
 
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cookieParser()); 
+app.use(cookieParser());
 
 const pool = mysql.createPool({
     host: 'localhost',
@@ -19,41 +20,18 @@ const pool = mysql.createPool({
     database: 'testDB'
 });
 
-// public 폴더를 정적 파일 제공을 위한 디렉토리로 지정
-// app.use(express.static(path.join(__dirname, '..', 'public')));
+app.get('/home', (req, res) => {
+    const userID = req.cookies.userID;
+    res.sendFile(path.join(__dirname, '..', 'src', 'Home', 'HomePage.js'));
+});
 
-// app.get('/', (req: Request, res: Response) => {
-//     res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
-// });
-
-// app.get('/home', (req: Request, res: Response) => {
-//     const userID = req.cookies.userID;
-//     res.sendFile(path.join(__dirname, '..', 'public', 'home.html'));
-// });
-
-// app.get('/addUser', (req: Request, res: Response) => {
-//     res.sendFile(path.join(__dirname, '..', 'public', 'adduser.html'));
-// });
-
-// app.get('/index', (req: Request, res: Response) => {
-//     res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
-// });
-
-// app.get('/setUp', (req: Request, res: Response) => {
-//     res.sendFile(path.join(__dirname, '..', 'public', 'setup.html'));
-// });
-
-// app.get('/setUp2', (req: Request, res: Response) => {
-//     res.sendFile(path.join(__dirname, '..', 'public', 'setup2.html'));
-// });
-
-// app.get('/setUp_pw', (req: Request, res: Response) => {
-//     res.sendFile(path.join(__dirname, '..', 'public', 'setup_pw.html'));
-// });
-
-app.post('/login', async (req: Request, res: Response) => {
+app.post('/login', async (req, res) => {
     const id = req.body.id;
     const pw = req.body.pw;
+
+     // 요청이 들어온 id와 pw를 콘솔에 출력
+     console.log('Received ID:', id);
+     console.log('Received PW:', pw);
 
     if (!id || !pw) {
         res.status(400).json({ error: 'ID와 PW를 모두 입력하세요.' });
@@ -65,33 +43,31 @@ app.post('/login', async (req: Request, res: Response) => {
     try {
         const conn = await pool.getConnection();
         const query = 'SELECT * FROM users WHERE user_id = ? AND user_pw = ?';
-        const [rows]: [any[]] = await conn.query(query, [id, pw]);
+        const [rows] = await conn.query(query, [id, pw]);
         const userNumQuery = 'SELECT user_num FROM users WHERE user_id = ?';
-        const [userNumRows]: [any[]] = await conn.query(userNumQuery, [id]);
+        const [userNumRows] = await conn.query(userNumQuery, [id]);
         const userNum = userNumRows[0].user_num;
         console.log('userNumRows:', userNumRows);
         console.log('userNum:', userNum);
         conn.release();
 
-        if (rows.length > 0) {          
-            res.cookie('userNum', userNum);
-            res.cookie('userID', id); 
-            res.redirect('/home');
+        if (rows.length > 0) {
+            const userNum = userNumRows[0].user_num;
+    res.status(200).json({ message: 'Login successful', userNum, userID: id});
         } else {
             res.status(401).json({ error: 'Invalid credentials' });
         }
-        
     } catch (error) {
         console.error('Error occurred:', error);
         res.status(500).json({ error: 'Internal server error.' });
     }
 });
 
-app.get('/signup', (req: Request, res: Response) => {
+app.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'signup.html'));
 });
 
-app.post('/signup', async (req: Request, res: Response) => {
+app.post('/signup', async (req, res) => {
     const id = req.body.id;
     const pw = req.body.pw;
 
@@ -117,9 +93,14 @@ app.post('/signup', async (req: Request, res: Response) => {
     }
 });
 
-app.post('/changePW', async (req: Request, res: Response) => {
+app.post('/changePW', async (req, res) => {
     const id = req.body.id;
     const newpw = req.body.pw;
+
+    
+     // 요청이 들어온 id와 pw를 콘솔에 출력
+     console.log('Received ID:', id);
+     console.log('Received PW:', newpw);
 
     if (!newpw) {
         console.error('새로운 PW를 입력하세요.');
@@ -133,7 +114,7 @@ app.post('/changePW', async (req: Request, res: Response) => {
         const [result] = await conn.query(query, [newpw, id]);
         conn.release();
 
-        if (result.affectedRows > 0) {            
+        if (result.affectedRows > 0) {
             console.log('비밀번호 변경이 완료되었습니다!');
             res.status(200).json({ message: '비밀번호 변경이 완료되었습니다!' });
         } else {
@@ -146,13 +127,45 @@ app.post('/changePW', async (req: Request, res: Response) => {
     }
 });
 
+app.post('/changeSK', async (req, res) => {
+    const id = req.body.id;
+    const newsk = req.body.sk;
 
+    
+     // 요청이 들어온 id와 pw를 콘솔에 출력
+     console.log('Received ID:', id);
+     console.log('Received Steamkey:', newsk);
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    if (!newsk) {
+        console.error('새로운 StreamKey를 입력하세요.');
+        res.status(400).json({ error: '새로운 StreamKey를 입력하세요.' });
+        return;
+    }
+
+    try {
+        const conn = await pool.getConnection();
+        const query = 'UPDATE users SET streamkey = ? WHERE user_id = ?';
+        const [result] = await conn.query(query, [newsk, id]);
+        conn.release();
+
+        if (result.affectedRows > 0) {
+            console.log('스트림키 변경/등록이 완료되었습니다!');
+            res.status(200).json({ message: '스트림키 변경/등록이 완료되었습니다!' });
+        } else {
+            console.error('Failed to insert new streamkey');
+            res.status(500).json({ error: 'Failed to insert new streamkey' });
+        }
+    } catch (error) {
+        console.error('Error occurred:', error);
+        res.status(500).json({ error: 'Internal server error.' });
+    }
+});
+
+app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
 });
 
-app.listen(3000, () => {
+app.listen(8000, () => {
     console.log('Server started');
 });
