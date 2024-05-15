@@ -418,15 +418,22 @@ const HomePage = () => {
             </div>
             <button className="userplus">
               <Link to="/adduser" className="adduser">
-                <div>+</div>
+                <div className="plusbutton">+</div>
               </Link>
             </button>
           </div>
 
           <button
             onClick={handlePreviewClick}
-            id="startProcessButton"
-            style={{ height: "7%", width: "100%" }}
+            className="startProcessButton "
+            style={{
+              height: "7%",
+              width: "100%",
+              fontSize: "22px",
+              border: "none",
+              fontFamily: '"Do Hyeon", sans-serif',
+              color: "#8f8e8e",
+            }}
           >
             {buttonTxt}
           </button>

@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import "./Login_Join.css";
 
 function Join() {
-  const [id, setId] = useState('');
-  const [pw, setPw] = useState('');
+  const [id, setId] = useState("");
+  const [pw, setPw] = useState("");
   const navigate = useNavigate();
 
   function submitForm() {
@@ -25,7 +25,7 @@ function Join() {
     })
       .then((response) => {
         if (response.status === 200) {
-          navigate('/');
+          navigate("/");
         } else if (response.status === 401) {
           alert("다시 시도해주세요!!");
         } else {
@@ -40,25 +40,30 @@ function Join() {
 
   return (
     <div className="Login_Join_all">
-      <div className="id_to_home">
-        <input
-          type="text"
-          className="input_place_tohome"
-          placeholder="아이디"
-          value={id}
-          onChange={(e) => setId(e.target.value)}
-        />
+      <div className="Join-background">
+        <div className="join-input-idpw">
+          <div className="signup">Sign up</div>
+          <div className="id_to_home">
+            <input
+              type="text"
+              className="input_place_tohome"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+            />
+          </div>
+          <div>
+            <input
+              type="password"
+              className="input_place_tohome_PW"
+              value={pw}
+              onChange={(e) => setPw(e.target.value)}
+            />
+          </div>
+        </div>
+        <button className="join_check_to_home" onClick={submitForm}>
+          확인
+        </button>
       </div>
-      <div>
-        <input
-          type="password"
-          className="input_place_tohome_PW"
-          placeholder="비밀번호"
-          value={pw}
-          onChange={(e) => setPw(e.target.value)}
-        />
-      </div>
-      <button className="join_check_to_home" onClick={submitForm}>확인</button>
     </div>
   );
 }

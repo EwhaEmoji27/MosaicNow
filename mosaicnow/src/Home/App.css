@@ -3,10 +3,12 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   margin: 0;
   padding: 0;
   background-color: #c1bcea; /* 보라색 배경 설정 */
+  font-size: 20px;
 }
 
 .App {

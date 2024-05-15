@@ -1,6 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Sunflower:wght@300&display=swap");
+
+body {
+  font-family: "Do Hyeon";
+  color: #8f8e8e;
+}
 #root {
-  width: 100vw;
-  height: 100vh;
+  width: 90vw;
+  height: 90vh;
 
   display: flex;
 
@@ -29,7 +35,7 @@
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  border-radius: 1%;
+  border-radius: 5px;
 }
 
 .setup_top {
@@ -69,19 +75,31 @@
 .pw_check {
   display: flex;
   justify-content: center;
-
-  flex-direction: row;
-  /* border: 2px solid black; */
-  width: 35%;
-  height: 10%;
+  align-items: center;
+  border: 2px solid #cdcdcd;
+  flex-direction: column;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  width: 20vw;
+  height: 30px;
 }
-
+.PW-txt {
+  color: #cdcdcd;
+}
+.input-place-check-pw {
+  height: 30px;
+  width: 100%;
+  border: 2px solid #cdcdcd;
+  border-radius: 5px;
+}
 .check {
   margin-top: 3vh;
   height: 3vh;
   width: 4vh;
 }
-
+.pw-check {
+  color: #cdcdcd;
+}
 .Change_info {
   display: flex;
   flex-direction: column;
@@ -94,52 +112,97 @@
 }
 
 .Change_StreamKey {
-  height: 4vh;
-  width: 10vh;
+  height: 3.5vh;
+  width: 20vw;
+  margin-bottom: 10px;
+  border: none;
+  cursor: pointer;
+  background-color: #c1bcea;
+  color: white;
+  border-radius: 5px;
 }
-
+.Change_StreamKey:hover {
+  background-color: #988fdc;
+}
 .Change_PW {
-  height: 4vh;
-  width: 10vh;
+  height: 3.5vh;
+  width: 20vw;
+  margin-bottom: 10px;
+  border: none;
+  cursor: pointer;
+  background-color: #c1bcea;
+  color: white;
+  border-radius: 5px;
+}
+.Change_PW:hover {
+  background-color: #988fdc;
 }
 
 .input_place_PW {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+
+  width: 20vw;
+  flex-direction: column;
+}
+.check {
+  height: 3.5vh;
+  width: 20vw;
+  margin-bottom: 10px;
+  border: none;
+  cursor: pointer;
+  background-color: #c1bcea;
+  color: white;
+  border-radius: 5px;
+}
+
+.check:hover {
+  background-color: #988fdc;
+}
+
+.Change_Info_box {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* border: 2px solid black; */
-  width: 80%;
 }
 
-.input_place {
-  height: 100%;
-  width: 80%;
+.input_place_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.new_pw {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 2px solid #cdcdcd;
-  border-radius: 2%;
-}
-
-/* 기본 버튼 스타일 */
-.button {
-  margin-top: 10px;
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  text-decoration: none;
-  cursor: pointer;
-  border: none;
+  flex-direction: column;
   border-radius: 5px;
-  transition: background-color 0.3s, color 0.3s;
+  margin-bottom: 30px;
+  width: 20vw;
+  height: 30px;
 }
 
-/* 기본 버튼에 마우스 호버 효과 */
-.button:hover {
+.gohomebutton {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+}
+
+.gOHome {
+  height: 3.5vh;
+  width: 20vw;
+  margin-bottom: 10px;
+  border: none;
+  cursor: pointer;
   background-color: #c1bcea;
   color: white;
+  border-radius: 5px;
 }
 
-/* 기본 버튼에 클릭 효과 */
-.button:active {
-  background-color: #9590ba;
+.gOHome:hover {
+  background-color: #988fdc;
 }

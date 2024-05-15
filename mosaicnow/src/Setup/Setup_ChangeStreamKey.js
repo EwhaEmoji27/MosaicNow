@@ -1,24 +1,24 @@
-import React, { useState, useEffect  } from "react";
+import React, { useState, useEffect } from "react";
 import Top from "../Home/Top";
 import "./Setup_ChangeStreamKey.css";
 import usericon from "../Home/img/user_icon.png";
 import { Link, useNavigate } from "react-router-dom";
 
 function Setup_ChangeSK() {
-  const [userID, setUserID] = useState('');  
-  const [streamkey, setSK] = useState('');
+  const [userID, setUserID] = useState("");
+  const [streamkey, setSK] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     // 페이지 로드 시 실행되는 함수
-    const userIDFromCookie = getCookie('userID');
+    const userIDFromCookie = getCookie("userID");
     setUserID(userIDFromCookie);
   }, []);
 
   function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
+    if (parts.length === 2) return parts.pop().split(";").shift();
   }
 
   function changeSK() {
@@ -49,7 +49,7 @@ function Setup_ChangeSK() {
       .then((response) => {
         if (response.status === 200) {
           alert("스트림키가 변경/등록되었습니다.");
-          navigate('/home');
+          navigate("/home");
         } else if (response.status === 500) {
           alert("다시 시도해주세요");
         } else {
@@ -73,21 +73,36 @@ function Setup_ChangeSK() {
           <div className="usericon_setup">
             <img className="user_icon_" src={usericon} alt="User Icon" />
           </div>
-          <p className="id_text"><span>{userID}</span></p>
+          <p className="id_text">
+            <span>{userID}</span>
+          </p>
           <div className="input_and_check">
-            <div className="Change_Info_box">
-              <div className="input_place_box">
-                <input
-                  type="streamkey"
-                  id="input_place"
-                  className="input_place"
-                  placeholder="새 스트림키 입력"
-                  value={streamkey}
-                  onChange={(e) => setSK(e.target.value)}
-                />
-              </div>
+            <div className="input_place_box">
+              <input
+                style={{
+                  fontFamily: '"Do Hyeon", sans-serif',
+                  color: "#cdcdcd",
+                }}
+                type="streamkey"
+                id="input_place"
+                className="input_place_stk"
+                placeholder="새 스트림키 입력"
+                value={streamkey}
+                onChange={(e) => setSK(e.target.value)}
+              />
             </div>
-              <button className="button" onClick={changeSK}>확인</button>
+
+            <button
+              className="gOHome_"
+              onClick={changeSK}
+              style={{
+                fontSize: "20px",
+                fontFamily: '"Do Hyeon", sans-serif',
+                color: "white",
+              }}
+            >
+              확인
+            </button>
           </div>
         </div>
       </div>

@@ -1,24 +1,24 @@
-import React, { useState, useEffect  } from "react";
+import React, { useState, useEffect } from "react";
 import Top from "../Home/Top";
-import "./Setup_ChangeStreamKey.css";
+import "./Setup.css";
 import usericon from "../Home/img/user_icon.png";
 import { Link, useNavigate } from "react-router-dom";
 
 function Setup_ChangePW() {
-  const [userID, setUserID] = useState('');  
-  const [password, setPassword] = useState('');
+  const [userID, setUserID] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     // 페이지 로드 시 실행되는 함수
-    const userIDFromCookie = getCookie('userID');
+    const userIDFromCookie = getCookie("userID");
     setUserID(userIDFromCookie);
   }, []);
 
   function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
+    if (parts.length === 2) return parts.pop().split(";").shift();
   }
 
   function changePW() {
@@ -49,7 +49,7 @@ function Setup_ChangePW() {
       .then((response) => {
         if (response.status === 200) {
           alert("비밀번호가 변경되었습니다.");
-          navigate('/home');
+          navigate("/home");
         } else if (response.status === 500) {
           alert("다시 시도해주세요");
         } else {
@@ -73,21 +73,36 @@ function Setup_ChangePW() {
           <div className="usericon_setup">
             <img className="user_icon_" src={usericon} alt="User Icon" />
           </div>
-          <p className="id_text"><span>{userID}</span></p>
+          <p className="id_text">
+            <span>{userID}</span>
+          </p>
           <div className="input_and_check">
-            <div className="Change_Info_box">
-              <div className="input_place_box">
-                <input
-                  type="password"
-                  id="input_place"
-                  className="input_place"
-                  placeholder="새 비밀번호 입력"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
+            <div className="input_place_box_">
+              <input
+                style={{
+                  fontFamily: '"Do Hyeon", sans-serif',
+                  color: "#cdcdcd",
+                }}
+                type="password"
+                id="input_place"
+                className="new_pw"
+                placeholder="새 비밀번호 입력"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
-              <button className="button" onClick={changePW}>확인</button> 
+
+            <button
+              className="gOHome"
+              onClick={changePW}
+              style={{
+                fontSize: "20px",
+                fontFamily: '"Do Hyeon", sans-serif',
+                color: "white",
+              }}
+            >
+              확인
+            </button>
           </div>
         </div>
       </div>
