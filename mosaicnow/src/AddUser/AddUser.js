@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-
+import Top from "../Home/Top";
 import { useNavigate } from "react-router-dom";
 
 import "./Adduser.css";
@@ -116,6 +116,9 @@ const AddUser = () => {
 
   return (
     <div className="all_contents">
+      <div className="Top">
+        <Top />
+      </div>
       <div className="title_and_startbutton">
         <h1 className="title">정면을 바라봐 주세요</h1>
       </div>
@@ -143,7 +146,11 @@ const AddUser = () => {
         />
       </div>
       {/* 필요한 경우 여기에 추가 버튼을 구현합니다. */}
-      <button className="add_button" onClick={add_face}>
+      <button className="add_button" onClick={add_face}style={{
+                    fontSize: "20px",
+                    fontFamily: '"Do Hyeon", sans-serif',
+                    color: "white",
+                  }}>
         얼굴 등록
       </button>
     </div>

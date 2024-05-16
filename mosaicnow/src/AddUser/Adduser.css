@@ -38,9 +38,19 @@ body {
 }
 
 .add_button {
-  margin-top: 20px;
-  height: 50px;
-  width: 80px;
+  height: 3.5vh;
+  width: 20vw;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: none;
+  cursor: pointer;
+  background-color: #988fdc;
+  color: white;
+  border-radius: 5px;
+}
+
+.add_button:hover{
+  background-color: #7467d8;
 }
 
 .all_contents {

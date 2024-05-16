@@ -13,163 +13,6 @@ import "./HomePage.css";
 import Top from "./Top";
 
 const HomePage = () => {
-  /*const videoRef = useRef(null);
-  const canvasRef = useRef(null);
-  const resultImageRef = useRef(null);
-  const [streamActive, setStreamActive] = useState(false);
-  const [frameCount, setFrameCount] = useState(0);
-  const [capturing, setCapturing] = useState(false);
-
-  useEffect(() => {
-    return () => stopCapture();
-  }, []);
-
-  const set_streaming = () => {
-    const formData = new FormData();
-    formData.append("user_id", "1"); // 예시로 '1'을 사용했습니다. 필요에 따라 변경해야 할 수 있습니다.
-    formData.append("stream_key", "your_stream_key"); // 스트림 키를 적절하게 설정해야 합니다.
-
-    fetch("http://127.0.0.1:5000/set_streaming", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.json()) // 응답 형식에 따라 적절히 조정하세요.
-      .then((data) => {
-        console.log("Streaming settings updated:", data);
-      })
-      .catch((error) => {
-        console.error("Error setting streaming:", error);
-      });
-  };
-
-  const start_streaming = () => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then((stream) => {
-        videoRef.current.srcObject = stream;
-        setStreamActive(true);
-        setCapturing(true);
-        console.log("Streaming started");
-      })
-      .catch((error) => {
-        console.error("Failed to start streaming:", error);
-      });
-  };
-  const handleProcessButtonClick = () => {
-    console.log("Process button clicked");
-    // 여기에 필요한 로직을 추가하세요.
-  };
-
-  const add_face = () => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then((stream) => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          setStreamActive(true);
-          resultImageRef.current.style.display = "block";
-          captureFrameLoop_add();
-        }
-      })
-      .catch((error) => console.error("카메라 접근 에러:", error));
-  };
-
-  const captureFrameLoop_add = () => {
-    if (!streamActive || frameCount > 50) {
-      stopCapture();
-      return;
-    }
-    const context = canvasRef.current.getContext("2d");
-    context.drawImage(
-      videoRef.current,
-      0,
-      0,
-      canvasRef.current.width,
-      canvasRef.current.height
-    );
-    canvasRef.current.toBlob((blob) => {
-      sendFrame_add(blob);
-      setFrameCount(frameCount + 1);
-    }, "image/jpeg");
-    setTimeout(captureFrameLoop_add, 100);
-  };
-
-  const stopCapture = () => {
-    if (streamActive) {
-      const tracks = videoRef.current.srcObject.getTracks();
-      tracks.forEach((track) => track.stop());
-      setStreamActive(false);
-      setCapturing(false);
-      videoRef.current.srcObject = null;
-      console.log("Streaming and capturing stopped.");
-    }
-  };
-
-  const sendFrame_add = (blob) => {
-    const formData = new FormData();
-    formData.append("user_id", 1);
-    formData.append("frame", blob, "frame.jpg");
-    fetch("http://127.0.0.1:5000/add_face", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.blob())
-      .then((blob) => {
-        resultImageRef.current.src = URL.createObjectURL(blob);
-      })
-      .catch((error) => console.error("Error sending frame:", error));
-  };
-
-  const process_face = () => {
-    if (!streamActive) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then((stream) => {
-          videoRef.current.srcObject = stream;
-          setStreamActive(true);
-          setCapturing(true);
-          resultImageRef.current.style.display = "block";
-          captureFrameLoop_process();
-        })
-        .catch((error) => console.error("Error processing face:", error));
-    } else if (capturing) {
-      stopCapture();
-    }
-  };
-
-  const captureFrameLoop_process = () => {
-    if (!streamActive || !capturing) {
-      return;
-    }
-    const context = canvasRef.current.getContext("2d");
-    context.drawImage(
-      videoRef.current,
-      0,
-      0,
-      canvasRef.current.width,
-      canvasRef.current.height
-    );
-    canvasRef.current.toBlob((blob) => {
-      sendFrame_process(blob);
-    }, "image/jpeg");
-    setTimeout(captureFrameLoop_process, 100);
-  };
-
-  const sendFrame_process = (blob) => {
-    const formData = new FormData();
-    formData.append("user_id", "1");
-    formData.append("selected_user_ids[]", "1");
-    formData.append("frame", blob, "frame.jpg");
-    fetch("http://127.0.0.1:5000/process_face", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.blob())
-      .then((blob) => {
-        resultImageRef.current.src = URL.createObjectURL(blob);
-      })
-      .catch((error) => console.error("Error sending processed frame:", error));
-  };*/
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const { resultImageUrl, setResultImageUrl } = useContext(ImageContext);
@@ -227,6 +70,7 @@ const HomePage = () => {
     captureAndSendFrame();
 
     if (buttonNum === 0) {
+      set_streaming();
       setbuttonTxt("시작하기");
       setbuttonNum(1);
     } else if (buttonNum === 1) {
@@ -287,7 +131,7 @@ const HomePage = () => {
   const set_streaming = (blob) => {
     let formData = new FormData();
     formData.append("user_id", "1");
-    formData.append("stream_key", "");
+    formData.append("stream_key", "60h0-eeq6-8yh3-tktj-cx33");
     fetch("http://110.9.11.9:5000/set_streaming", {
       method: "POST",
       body: formData,
@@ -353,15 +197,15 @@ const HomePage = () => {
       })
       .catch((error) => console.error("Error:", error));
   }
+  
+  const [userID, setUserID] = useState("");
 
-  // 페이지 로드 시 실행되는 함수
-  window.onload = function () {
-    // 쿠키에서 사용자 ID를 가져와서 id_text 엘리먼트에 적용
-    const userID = getCookie("userID");
-    document.getElementById("userID").innerText = userID;
-  };
+  useEffect(() => {
+    // 페이지 로드 시 실행되는 함수
+    const userIDFromCookie = getCookie("userID");
+    setUserID(userIDFromCookie);
+  }, []);
 
-  // 쿠키에서 특정 이름의 쿠키 값을 가져오는 함수
   function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -412,7 +256,9 @@ const HomePage = () => {
             </div>
           </div>
           <div className="users-box">
-            <div className="userid">id </div>
+          <p className="id_text">
+            <span>{userID}</span>
+          </p>
             <div className="RegisteredUser">
               &nbsp;&nbsp;등록된 사용자&nbsp;&nbsp;
             </div>
@@ -444,59 +290,3 @@ const HomePage = () => {
 };
 export default HomePage;
 
-// 0503 이전 코드
-/*import React, { useState } from "react";
-//import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import Top from "./Top";
-import UserInfoPanel from "./UserInfoPanel";
-import ContentArea from "./ContentArea";
-
-import "./App.css";
-
-function HomePage() {
-  return (
-    <div className="App">
-      <div className="Top">
-        <Top />
-      </div>
-
-      <div className="ContentWrapper">
-        <ContentArea />
-
-        <UserInfoPanel />
-      </div>
-    </div>
-  );
-}
-
-export default HomePage;*/
-
-/*function App(){
-  return(
-    <Router>
-      
-
-        <div className="App">
-
-          <div className='Top'>
-            <Top />
-            
-          </div>
-        <Routes>
-          <Route path='/' component={HomePage} />
-          <Route path='/setup' element={<Setup/>}/>
-
-        </Routes>
-
-          <div className="ContentWrapper">
-
-            <ContentArea />
-
-            <UserInfoPanel />
-
-          </div>
-        </div>
-      </Router>
-  )
-
-}*/

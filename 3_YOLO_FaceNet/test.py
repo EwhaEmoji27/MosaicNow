@@ -241,17 +241,16 @@ def set_streaming():
         return jsonify({'error': 'User ID is required.'}), 400
 
     # 스트리밍 세팅  C:\Users\ffmpeg-2024-01-17-git-8e23ebe6f9-full_build\bin\ffmpeg.exe
-    FFmpeg = r'C:\Users\yhj01\ffmpeg\bin\ffmpeg.exe'
-    YOUTUBE_URL = 'rtmp://a.rtmp.youtube.com/live2/'
+    FFmpeg = r'D:\다운로드\ffmpeg-6.1.1-full_build\ffmpeg-6.1.1-full_build\bin'
+    YOUTUBE_URL = 'rtmp://a.rtmp.youtube.com/live2'
     command = [
                 FFmpeg,
                 '-f', 'image2pipe',
                 '-vcodec', 'mjpeg',
                 '-s', '640x480',
                 '-i', '-',
-                '-f', 'dshow',
-                '-rtbufsize', '5120000',
-                '-i', 'audio=Microphone Array(Intel® Smart Sound Technology for Digital Microphones)',  # Dummy audio generation   -> audio=마이크(HCAM01Q)
+                '-f', 'lavfi',
+                '-i', 'anullsrc=r=44100:cl=stereo',  # Dummy audio generation   -> audio=마이크(HCAM01Q)
                 '-acodec', 'aac',
                 '-ar', '44100',
                 '-ac', '2',
