@@ -241,7 +241,7 @@ def set_streaming():
         return jsonify({'error': 'User ID is required.'}), 400
 
     # 스트리밍 세팅  C:\Users\ffmpeg-2024-01-17-git-8e23ebe6f9-full_build\bin\ffmpeg.exe
-    FFmpeg = r'D:\다운로드\ffmpeg-6.1.1-full_build\ffmpeg-6.1.1-full_build\bin'
+    FFmpeg = r'D:\다운로드\ffmpeg-6.1.1-full_build\ffmpeg-6.1.1-full_build\bin\ffmpeg.exe'
     YOUTUBE_URL = 'rtmp://a.rtmp.youtube.com/live2'
     command = [
                 FFmpeg,

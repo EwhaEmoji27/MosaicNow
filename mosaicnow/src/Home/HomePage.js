@@ -22,6 +22,7 @@ const HomePage = () => {
   const [buttonTxt, setbuttonTxt] = useState("미리보기");
   const [buttonNum, setbuttonNum] = useState(0);
   const [capturing, setCapturing] = useState(false);
+  const [previewActive, setPreviewActive] = useState(false);
 
   useEffect(() => {
     const getUserMedia = async () => {
@@ -51,14 +52,14 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    if (streamActive) {
+    if (streamActive && (previewActive || capturing)) {
       intervalRef.current = setInterval(captureAndSendFrame, 100);
     } else {
       clearInterval(intervalRef.current);
     }
 
     return () => clearInterval(intervalRef.current);
-  }, [streamActive]);
+  }, [streamActive, previewActive, capturing]);
 
   useEffect(() => {
     console.log(buttonNum);
@@ -67,6 +68,7 @@ const HomePage = () => {
   const handlePreviewClick = useCallback(() => {
     if (!streamActive) return;
     setResultImageVisible(true);
+    setPreviewActive((prev) => !prev);
     captureAndSendFrame();
 
     if (buttonNum === 0) {
@@ -74,6 +76,7 @@ const HomePage = () => {
       setbuttonTxt("시작하기");
       setbuttonNum(1);
     } else if (buttonNum === 1) {
+      setCapturing(true);
       start_streaming();
       setbuttonTxt("멈추기");
       setbuttonNum(2);
@@ -90,6 +93,7 @@ const HomePage = () => {
       setStreamActive(false);
       setCapturing(false);
       videoRef.current.srcObject = null;
+      setPreviewActive(false);
       console.log("Streaming and capturing stopped.");
     }
   };
@@ -107,7 +111,11 @@ const HomePage = () => {
       canvasRef.current.width,
       canvasRef.current.height
     );
-    canvasRef.current.toBlob(sendFrameAdd, "image/jpeg");
+    canvasRef.current.toBlob((blob) => {
+      if (previewActive || capturing) {
+        sendFrameAdd(blob);
+      }
+    }, "image/jpeg");
   };
 
   const sendFrameAdd = (blob) => {
@@ -143,6 +151,7 @@ const HomePage = () => {
       .catch((error) => console.error("Error:", error));
   };
   const start_streaming = () => {
+    setCapturing(true);
     if (!streamActive) {
       navigator.mediaDevices
         .getUserMedia({ video: true })
@@ -150,7 +159,9 @@ const HomePage = () => {
           videoRef.srcObject = stream;
           streamActive = true;
           capturing = true;
+          setStreamActive(true);
           captureFrameLoop_streaming();
+          setCapturing(true);
           resultImageUrl.style.display = "block"; // 처리 후 영상 보여주기
         })
         .catch((error) => console.error(error));
@@ -197,7 +208,7 @@ const HomePage = () => {
       })
       .catch((error) => console.error("Error:", error));
   }
-  
+
   const [userID, setUserID] = useState("");
 
   useEffect(() => {
@@ -256,11 +267,15 @@ const HomePage = () => {
             </div>
           </div>
           <div className="users-box">
-          <p className="id_text">
-            <span>{userID}</span>
-          </p>
+            <p className="id_text">
+              <span>{userID}</span>
+            </p>
             <div className="RegisteredUser">
               &nbsp;&nbsp;등록된 사용자&nbsp;&nbsp;
+            </div>
+            <div className="testuser">
+              <input type="checkbox" />
+              <div className="testuserbox"> user1</div>
             </div>
             <button className="userplus">
               <Link to="/adduser" className="adduser">
@@ -289,4 +304,3 @@ const HomePage = () => {
   );
 };
 export default HomePage;
-
