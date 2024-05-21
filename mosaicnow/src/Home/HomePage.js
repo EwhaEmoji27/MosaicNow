@@ -11,6 +11,7 @@ import usericon from "./img/user_icon.png";
 import setupicon from "./img/setup.png";
 import "./HomePage.css";
 import Top from "./Top";
+import axios from "axios";
 
 const HomePage = () => {
   const videoRef = useRef(null);
@@ -23,6 +24,20 @@ const HomePage = () => {
   const [buttonNum, setbuttonNum] = useState(0);
   const [capturing, setCapturing] = useState(false);
   const [previewActive, setPreviewActive] = useState(false);
+
+  const [userList, setUserList] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/users")
+      .then((response) => {
+        console.log(response.data);
+        setUserList(response.data);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the user list!", error);
+      });
+  }, []);
 
   useEffect(() => {
     const getUserMedia = async () => {
@@ -273,10 +288,12 @@ const HomePage = () => {
             <div className="RegisteredUser">
               &nbsp;&nbsp;등록된 사용자&nbsp;&nbsp;
             </div>
-            <div className="testuser">
-              <input type="checkbox" />
-              <div className="testuserbox"> user1</div>
-            </div>
+            {userList.map((user, index) => (
+              <div className="testuser" key={index}>
+                <input type="checkbox" />
+                <div className="testuserbox">{user}</div>
+              </div>
+            ))}
             <button className="userplus">
               <Link to="/adduser" className="adduser">
                 <div className="plusbutton">+</div>
