@@ -23,6 +23,7 @@ const HomePage = () => {
   const [buttonNum, setbuttonNum] = useState(0);
   const [capturing, setCapturing] = useState(false);
   const [previewActive, setPreviewActive] = useState(false);
+  const [startsendFrame, setStartSendFrame] = useState(true);
 
   useEffect(() => {
     const getUserMedia = async () => {
@@ -69,15 +70,14 @@ const HomePage = () => {
     if (!streamActive) return;
     setResultImageVisible(true);
     setPreviewActive((prev) => !prev);
-    captureAndSendFrame();
 
     if (buttonNum === 0) {
-      set_streaming();
       setbuttonTxt("시작하기");
       setbuttonNum(1);
     } else if (buttonNum === 1) {
-      setCapturing(true);
+      stopCapture();
       start_streaming();
+      setStartSendFrame(false);
       setbuttonTxt("멈추기");
       setbuttonNum(2);
     } else if (buttonNum === 2) {
@@ -123,17 +123,23 @@ const HomePage = () => {
     formData.append("user_id", 1);
     formData.append("selected_user_ids[]", 1);
     formData.append("frame", blob, "frame.jpg");
-
-    fetch("http://127.0.0.1:5000/process_face", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.blob())
-      .then((blob) => {
-        const objectURL = URL.createObjectURL(blob);
-        setResultImageUrl(objectURL);
+    if (startsendFrame === true) {
+      console.log("시작");
+      console.log("startsendFrame");
+      fetch("http://127.0.0.1:5000/process_face", {
+        method: "POST",
+        body: formData,
       })
-      .catch((error) => console.error("Error:", error));
+        .then((response) => response.blob())
+        .then((blob) => {
+          const objectURL = URL.createObjectURL(blob);
+          setResultImageUrl(objectURL);
+        })
+        .catch((error) => console.error("Error:", error));
+    } else {
+      console.log("멈춰야하는데?");
+      console.log(startsendFrame);
+    }
   };
 
   const set_streaming = (blob) => {
