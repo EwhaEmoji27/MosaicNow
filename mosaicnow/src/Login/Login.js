@@ -70,11 +70,28 @@ function Login() {
           </div>
         </div>
         <div className="buttons_box">
-          <button className="check_to_home" onClick={submitForm}>
+          <button
+            className="check_to_home"
+            onClick={submitForm}
+            style={{
+              fontSize: "20px",
+              fontFamily: '"Do Hyeon", sans-serif',
+              color: "white",
+            }}
+          >
             확인
           </button>
           <Link to="/Join">
-            <button className="check_to_join">회원가입</button>
+            <button
+              className="check_to_join"
+              style={{
+                fontSize: "20px",
+                fontFamily: '"Do Hyeon", sans-serif',
+                color: "white",
+              }}
+            >
+              회원가입
+            </button>
           </Link>
         </div>
       </div>
