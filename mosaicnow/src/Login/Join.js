@@ -44,7 +44,6 @@ function Join() {
         <div className="join-input-idpw">
           <div className="signup">Sign up</div>
           <div className="id_to_home">
-            <div className="idt">ID</div>
             <input
               type="text"
               className="input_place_tohome"
@@ -53,7 +52,6 @@ function Join() {
             />
           </div>
           <div>
-            <div className="pwt">PW</div>
             <input
               type="password"
               className="input_place_tohome_PW"
@@ -62,15 +60,7 @@ function Join() {
             />
           </div>
         </div>
-        <button
-          className="join_check_to_home"
-          onClick={submitForm}
-          style={{
-            fontSize: "20px",
-            fontFamily: '"Do Hyeon", sans-serif',
-            color: "white",
-          }}
-        >
+        <button className="join_check_to_home" onClick={submitForm}>
           확인
         </button>
       </div>
