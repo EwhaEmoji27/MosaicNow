@@ -11,6 +11,7 @@ import usericon from "./img/user_icon.png";
 import setupicon from "./img/setup.png";
 import "./HomePage.css";
 import Top from "./Top";
+import axios from "axios";
 
 const HomePage = () => {
   const videoRef = useRef(null);
@@ -23,6 +24,21 @@ const HomePage = () => {
   const [buttonNum, setbuttonNum] = useState(0);
   const [capturing, setCapturing] = useState(false);
   const [previewActive, setPreviewActive] = useState(false);
+  const [startsendFrame, setStartSendFrame] = useState(true);
+
+  const [userList, setUserList] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/users")
+      .then((response) => {
+        console.log(response.data);
+        setUserList(response.data);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the user list!", error);
+      });
+  }, []);
 
   useEffect(() => {
     const getUserMedia = async () => {
@@ -69,15 +85,14 @@ const HomePage = () => {
     if (!streamActive) return;
     setResultImageVisible(true);
     setPreviewActive((prev) => !prev);
-    captureAndSendFrame();
 
     if (buttonNum === 0) {
-      set_streaming();
       setbuttonTxt("시작하기");
       setbuttonNum(1);
     } else if (buttonNum === 1) {
-      setCapturing(true);
+      stopCapture();
       start_streaming();
+      setStartSendFrame(false);
       setbuttonTxt("멈추기");
       setbuttonNum(2);
     } else if (buttonNum === 2) {
@@ -123,17 +138,23 @@ const HomePage = () => {
     formData.append("user_id", 1);
     formData.append("selected_user_ids[]", 1);
     formData.append("frame", blob, "frame.jpg");
-
-    fetch("http://127.0.0.1:5000/process_face", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.blob())
-      .then((blob) => {
-        const objectURL = URL.createObjectURL(blob);
-        setResultImageUrl(objectURL);
+    if (startsendFrame === true) {
+      console.log("시작");
+      console.log("startsendFrame");
+      fetch("http://127.0.0.1:5000/process_face", {
+        method: "POST",
+        body: formData,
       })
-      .catch((error) => console.error("Error:", error));
+        .then((response) => response.blob())
+        .then((blob) => {
+          const objectURL = URL.createObjectURL(blob);
+          setResultImageUrl(objectURL);
+        })
+        .catch((error) => console.error("Error:", error));
+    } else {
+      console.log("멈춰야하는데?");
+      console.log(startsendFrame);
+    }
   };
 
   const set_streaming = (blob) => {
@@ -273,10 +294,12 @@ const HomePage = () => {
             <div className="RegisteredUser">
               &nbsp;&nbsp;등록된 사용자&nbsp;&nbsp;
             </div>
-            <div className="testuser">
-              <input type="checkbox" />
-              <div className="testuserbox"> user1</div>
-            </div>
+            {userList.map((user, index) => (
+              <div className="testuser" key={index}>
+                <input type="checkbox" />
+                <div className="testuserbox">{user}</div>
+              </div>
+            ))}
             <button className="userplus">
               <Link to="/adduser" className="adduser">
                 <div className="plusbutton">+</div>
