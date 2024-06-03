@@ -16,7 +16,7 @@ function Join() {
 
     const data = { id, pw };
 
-    fetch("http://110.9.11.9:8000/signup", {
+    fetch("http://localhost:8000/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

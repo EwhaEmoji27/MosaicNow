@@ -10,6 +10,7 @@ const AddUser = () => {
   const [streamActive, setStreamActive] = useState(false);
   const [frameCount, setFrameCount] = useState(0);
   const [resultImageUrl, setResultImageUrl] = useState("");
+  const [userName, setUserName] = useState(""); // 사용자 이름 상태 추가
   const timerIdRef = useRef(null); // setTimeout의 ID를 저장하기 위한 ref
   const [videoVisible, setVideoVisible] = useState(true); // 비디오 보이는지 안보이는지
 
@@ -47,6 +48,10 @@ const AddUser = () => {
   }, [streamActive]);
 
   const add_face = () => {
+    if (!userName) {
+      alert("이름을 입력해주세요.");
+      return;
+    }
     setVideoVisible(false);
     navigator.mediaDevices
       .getUserMedia({ video: true })
@@ -83,7 +88,7 @@ const AddUser = () => {
 
   const sendFrame_add = (blob) => {
     let formData = new FormData();
-    formData.append("user_id", 1);
+    formData.append("user_id", userName); // 사용자 이름을 user_id로 설정
     formData.append("frame", blob, "frame.jpg");
     fetch("http://127.0.0.1:5000/add_face", {
       method: "POST",
@@ -146,13 +151,37 @@ const AddUser = () => {
         />
       </div>
       {/* 필요한 경우 여기에 추가 버튼을 구현합니다. */}
-      <button className="add_button" onClick={add_face}style={{
-                    fontSize: "20px",
-                    fontFamily: '"Do Hyeon", sans-serif',
-                    color: "white",
-                  }}>
-        얼굴 등록
-      </button>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+  <input
+    type="text"
+    value={userName}
+    onChange={(e) => setUserName(e.target.value)}
+    placeholder="이름을 입력하세요"
+    className="name_input"
+    style={{
+      padding: "10px",
+      fontSize: "16px",
+      border: "2px solid #ccc",
+      borderRadius: "5px",
+      marginTop: "10px",
+      marginBottom: "10px",
+      width: "100%",
+      boxSizing: "border-box",
+    }}
+  />
+  <button
+    className="add_button"
+    onClick={add_face}
+    style={{
+      fontSize: "20px",
+      fontFamily: '"Do Hyeon", sans-serif',
+      color: "white",
+    }}
+  >
+    얼굴 등록
+  </button>
+</div>
+
     </div>
   );
 };

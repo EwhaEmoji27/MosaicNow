@@ -20,11 +20,11 @@ const HomePage = () => {
   const [streamActive, setStreamActive] = useState(false);
   const [resultImageVisible, setResultImageVisible] = useState(false);
   const intervalRef = useRef(null);
-  const [buttonTxt, setbuttonTxt] = useState("미리보기");
-  const [buttonNum, setbuttonNum] = useState(0);
+  const [buttonTxt, setButtonTxt] = useState("미리보기");
+  const [buttonNum, setButtonNum] = useState(0);
   const [capturing, setCapturing] = useState(false);
   const [previewActive, setPreviewActive] = useState(false);
-  const [startsendFrame, setStartSendFrame] = useState(true);
+  const [startSendFrame, setStartSendFrame] = useState(true);
 
   const [userList, setUserList] = useState([]);
 
@@ -87,20 +87,23 @@ const HomePage = () => {
     setPreviewActive((prev) => !prev);
 
     if (buttonNum === 0) {
-      setbuttonTxt("시작하기");
-      setbuttonNum(1);
+      setStreaming();
+      setButtonTxt("시작하기");
+      setButtonNum(1);
     } else if (buttonNum === 1) {
       stopCapture();
-      start_streaming();
-      setStartSendFrame(false);
-      setbuttonTxt("멈추기");
-      setbuttonNum(2);
+      setStreamActive(false);
+      setButtonTxt("멈추기");
+      startStreaming();
+      console.log('이것도 안되면 진짜 노답');
+      setButtonNum(2);
     } else if (buttonNum === 2) {
-      setbuttonTxt("미리보기");
-      setbuttonNum(0);
+      setButtonTxt("미리보기");
+      setButtonNum(0);
       stopCapture();
     }
   }, [streamActive, buttonNum]);
+
   const stopCapture = () => {
     if (streamActive) {
       const tracks = videoRef.current.srcObject.getTracks();
@@ -138,10 +141,10 @@ const HomePage = () => {
     formData.append("user_id", 1);
     formData.append("selected_user_ids[]", 1);
     formData.append("frame", blob, "frame.jpg");
-    if (startsendFrame === true) {
+    if (startSendFrame) {
       console.log("시작");
-      console.log("startsendFrame");
-      fetch("http://127.0.0.1:5000/process_face", {
+      console.log("startSendFrame");
+      fetch("http://localhost:5000/process_face", {
         method: "POST",
         body: formData,
       })
@@ -153,44 +156,46 @@ const HomePage = () => {
         .catch((error) => console.error("Error:", error));
     } else {
       console.log("멈춰야하는데?");
-      console.log(startsendFrame);
+      console.log(startSendFrame);
     }
   };
 
-  const set_streaming = (blob) => {
+  const setStreaming = () => {
     let formData = new FormData();
     formData.append("user_id", "1");
     formData.append("stream_key", "60h0-eeq6-8yh3-tktj-cx33");
-    fetch("http://110.9.11.9:5000/set_streaming", {
+    fetch("http://localhost:5000/set_streaming", {
       method: "POST",
       body: formData,
     })
       .then((response) => response.blob())
       .then((blob) => {
-        //resultImage.src = URL.createObjectURL(blob); // 처리된 이미지 업데이트
+        // 처리된 이미지 업데이트
       })
       .catch((error) => console.error("Error:", error));
   };
-  const start_streaming = () => {
+
+  const startStreaming = () => {
     setCapturing(true);
+    console.log('0');
     if (!streamActive) {
+      console.log('1');
       navigator.mediaDevices
         .getUserMedia({ video: true })
         .then((stream) => {
-          videoRef.srcObject = stream;
-          streamActive = true;
-          capturing = true;
+          videoRef.current.srcObject = stream;
           setStreamActive(true);
-          captureFrameLoop_streaming();
           setCapturing(true);
-          resultImageUrl.style.display = "block"; // 처리 후 영상 보여주기
+          captureFrameLoopStreaming();
+          // 처리 후 영상 보여주기
         })
         .catch((error) => console.error(error));
     } else if (capturing) {
+      console.log('2');
       stopCapture(); // 캡처 중지
       let formData = new FormData();
       formData.append("user_id", "1");
-      fetch("http://110.9.11.9:5000/stop_streaming", {
+      fetch("http://localhost:5000/stop_streaming", {
         method: "POST",
         body: formData,
       })
@@ -201,31 +206,35 @@ const HomePage = () => {
     }
   };
 
-  function captureFrameLoop_streaming() {
+  function captureFrameLoopStreaming() {
     if (!streamActive || !capturing) {
+      console.log('3');
       return;
     }
     const context = canvasRef.current.getContext("2d");
-
-    context.drawImage(videoRef, 0, 0, canvasRef.width, canvasRef.height);
-    canvasRef.toBlob((blob) => {
-      sendFrame_streaming(blob);
+    console.log('4');
+    context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+    canvasRef.current.toBlob((blob) => {
+      sendFrameStreaming(blob);
+      console.log('5');
     }, "image/jpeg");
-    setTimeout(captureFrameLoop_streaming, 100); // 0.1초 간격으로 프레임 캡처
+    setTimeout(captureFrameLoopStreaming, 100); // 0.1초 간격으로 프레임 캡처
   }
 
-  function sendFrame_streaming(blob) {
+  function sendFrameStreaming(blob) {
     let formData = new FormData();
     formData.append("user_id", "1");
     formData.append("selected_user_ids[]", 1);
     formData.append("frame", blob, ["frame.jpg"]);
-    fetch("http://110.9.11.9:5000/start_streaming", {
+    console.log('6');
+    fetch("http://localhost:5000/start_streaming", {
       method: "POST",
       body: formData,
     })
       .then((response) => response.blob())
       .then((blob) => {
-        resultImageUrl.src = URL.createObjectURL(blob); // 처리된 이미지 업데이트
+        // 처리된 이미지 업데이트
+        console.log('7');
       })
       .catch((error) => console.error("Error:", error));
   }
@@ -233,7 +242,6 @@ const HomePage = () => {
   const [userID, setUserID] = useState("");
 
   useEffect(() => {
-    // 페이지 로드 시 실행되는 함수
     const userIDFromCookie = getCookie("userID");
     setUserID(userIDFromCookie);
   }, []);
@@ -243,6 +251,7 @@ const HomePage = () => {
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(";").shift();
   }
+
   return (
     <div className="Home-all">
       <div className="Topbox">
@@ -321,9 +330,26 @@ const HomePage = () => {
           >
             {buttonTxt}
           </button>
+
+          {/* startStreamingButton 추가 */}
+          <button
+            onClick={startStreaming}
+            className="startStreamingButton"
+            style={{
+              height: "7%",
+              width: "100%",
+              fontSize: "22px",
+              border: "none",
+              fontFamily: '"Do Hyeon", sans-serif',
+              color: "#8f8e8e",
+            }}
+          >
+            Start Streaming
+          </button>
         </div>
       </div>
     </div>
   );
 };
+
 export default HomePage;

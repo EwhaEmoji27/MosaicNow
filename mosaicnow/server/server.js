@@ -18,11 +18,12 @@ const pool = mysql.createPool({
   port: "3306",
   user: "root",
   password: "0000",
-  database: "testDB",
+  database: "EmojiDB",
 });
 
 app.get("/api/users", (req, res) => {
-  const directoryPath = "E:/GitHub/EmojiYOLO/3_YOLO_FaceNet/dataset";
+  const directoryPath = "D:/Github/Web/EmojiYOLO/3_YOLO_FaceNet/dataset";
+
   fs.readdir(directoryPath, (err, files) => {
     if (err) {
       return res.status(500).send("Unable to scan directory: " + err);
@@ -96,7 +97,7 @@ app.post("/signup", async (req, res) => {
     conn.release();
 
     if (result.affectedRows > 0) {
-      res.redirect("/index");
+        res.status(200).json({ message: "회원가입이 완료되었습니다!" });
     } else {
       res.status(500).json({ error: "Failed to insert user information" });
     }

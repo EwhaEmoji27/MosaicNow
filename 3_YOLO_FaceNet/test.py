@@ -38,7 +38,7 @@ def load_selected_embeddings(selected_user_ids):
     embeddings = []
     labels = []
     for user_id in selected_user_ids:
-        user_folder = os.path.join(dataset_path, f"user_{user_id}")  # 사용자 ID별 폴더 경로
+        user_folder = os.path.join(dataset_path, f"{user_id}")  # 사용자 ID별 폴더 경로
         if not os.path.exists(user_folder):
             print(f"No data for user ID {user_id}")
             continue  # 해당 사용자 폴더가 없으면 다음 사용자로 넘어감
@@ -46,7 +46,7 @@ def load_selected_embeddings(selected_user_ids):
             if file.endswith(".npy"):  # npy 파일만 로드
                 embedding = np.load(os.path.join(user_folder, file))
                 embeddings.append(embedding)
-                labels.append(int(user_id))
+                labels.append(user_id)
     return np.array(embeddings), np.array(labels)
 
 def apply_mosaic(frame, top_left, bottom_right, factor=0.1):
@@ -122,7 +122,7 @@ def add_face():
 
     if len(user_embeddings[user_id]) == 50:
         avg_embedding = np.mean(np.stack(user_embeddings[user_id]), axis=0)
-        user_folder = os.path.join(dataset_path, f"user_{user_id}")
+        user_folder = os.path.join(dataset_path, f"{user_id}")
         create_directory(user_folder)
         
         files = [f for f in os.listdir(user_folder) if f.endswith('.npy')]
@@ -195,7 +195,7 @@ def process_face():
         label = labels[min_distance_index]
 
         if min_distance < 0.7:
-            name = f"User {label}"
+            name = f"{label}"
         else:
             name = "Unknown"
             frame = apply_mosaic(frame, (x1, y1), (x2, y2))

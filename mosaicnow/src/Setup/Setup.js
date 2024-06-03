@@ -35,7 +35,7 @@ function Setup(props) {
 
     const data = { id: userID, pw: password };
 
-    fetch("http://110.9.11.9:8000/login", {
+    fetch("http://localhost:8000/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

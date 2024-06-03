@@ -39,7 +39,7 @@ function Setup_ChangeSK() {
 
     const data = { id: userID, sk: streamkey };
 
-    fetch("http://110.9.11.9:8000/changeSK", {
+    fetch("http://localhost:8000/changeSK", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

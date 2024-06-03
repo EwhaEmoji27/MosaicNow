@@ -39,7 +39,7 @@ function Setup_ChangePW() {
 
     const data = { id: userID, pw: password };
 
-    fetch("http://110.9.11.9:8000/changePW", {
+    fetch("http://localhost:8000/changePW", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

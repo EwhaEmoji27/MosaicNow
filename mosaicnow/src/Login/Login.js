@@ -16,7 +16,7 @@ function Login() {
 
     const data = { id, pw };
 
-    fetch("http://110.9.11.9:8000/login", {
+    fetch("http://localhost:8000/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -62,7 +62,7 @@ function Login() {
           <div>
             <div className="pwt">PW</div>
             <input
-              type="text"
+              type="password"
               className="input_place_tohome_PW"
               value={pw}
               onChange={(e) => setPw(e.target.value)}
