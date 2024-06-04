@@ -88,7 +88,8 @@ const AddUser = () => {
 
   const sendFrame_add = (blob) => {
     let formData = new FormData();
-    formData.append("user_id", userName); // 사용자 이름을 user_id로 설정
+    formData.append("user_id", 1); 
+    formData.append('face_name', userName);
     formData.append("frame", blob, "frame.jpg");
     fetch("http://127.0.0.1:5000/add_face", {
       method: "POST",

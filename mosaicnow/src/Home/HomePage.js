@@ -28,6 +28,9 @@ const HomePage = () => {
 
   const [userList, setUserList] = useState([]);
 
+  const [selectedUsers, setSelectedUsers] = useState([]);
+
+  
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/users")
@@ -81,6 +84,14 @@ const HomePage = () => {
     console.log(buttonNum);
   }, [buttonNum]);
 
+  const handleUserSelection = (user) => {
+    if (selectedUsers.includes(user)) {
+      setSelectedUsers(selectedUsers.filter((selectedUser) => selectedUser !== user));
+    } else {
+      setSelectedUsers([...selectedUsers, user]);
+    }
+  };
+  
   const handlePreviewClick = useCallback(() => {
     if (!streamActive) return;
     setResultImageVisible(true);
@@ -131,18 +142,25 @@ const HomePage = () => {
     );
     canvasRef.current.toBlob((blob) => {
       if (previewActive || capturing) {
-        sendFrameAdd(blob);
+        sendFrameAdd(blob, selectedUsers);
       }
     }, "image/jpeg");
   };
 
-  const sendFrameAdd = (blob) => {
+  const sendFrameAdd = (blob, selectedUsers) => {
     let formData = new FormData();
     formData.append("user_id", 1);
-    formData.append("selected_user_ids[]", 1);
+    if (selectedUsers) {
+      for (let i = 0; i < selectedUsers.length; i++) {
+          const user = selectedUsers[i];
+          formData.append('selected_embedding_ids[]', user);
+      }
+  } else {
+      console.error("selectedUsers is undefined");
+  }
+  
     formData.append("frame", blob, "frame.jpg");
     if (startSendFrame) {
-      console.log("시작");
       console.log("startSendFrame");
       fetch("http://localhost:5000/process_face", {
         method: "POST",
@@ -155,7 +173,6 @@ const HomePage = () => {
         })
         .catch((error) => console.error("Error:", error));
     } else {
-      console.log("멈춰야하는데?");
       console.log(startSendFrame);
     }
   };
@@ -213,7 +230,7 @@ const HomePage = () => {
     }
     const context = canvasRef.current.getContext("2d");
     console.log('4');
-    context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+    context.drawImage(videoRef.current, 0, 0, (canvasRef.current.width*2), (canvasRef.current.height*2));
     canvasRef.current.toBlob((blob) => {
       sendFrameStreaming(blob);
       console.log('5');
@@ -305,7 +322,7 @@ const HomePage = () => {
             </div>
             {userList.map((user, index) => (
               <div className="testuser" key={index}>
-                <input type="checkbox" />
+                <input type="checkbox" onChange={() => handleUserSelection(user)} />
                 <div className="testuserbox">{user}</div>
               </div>
             ))}
@@ -331,21 +348,6 @@ const HomePage = () => {
             {buttonTxt}
           </button>
 
-          {/* startStreamingButton 추가 */}
-          <button
-            onClick={startStreaming}
-            className="startStreamingButton"
-            style={{
-              height: "7%",
-              width: "100%",
-              fontSize: "22px",
-              border: "none",
-              fontFamily: '"Do Hyeon", sans-serif',
-              color: "#8f8e8e",
-            }}
-          >
-            Start Streaming
-          </button>
         </div>
       </div>
     </div>
