@@ -30,6 +30,7 @@ const HomePage = () => {
 
   const [selectedUsers, setSelectedUsers] = useState([]);
 
+  const [isVideoBoxVisible, setIsVideoBoxVisible] = useState(true);
   
   useEffect(() => {
     axios
@@ -100,10 +101,9 @@ const HomePage = () => {
     if (buttonNum === 0) {
       setStreaming();
       setButtonTxt("시작하기");
+      Click();
       setButtonNum(1);
     } else if (buttonNum === 1) {
-      stopCapture();
-      setStreamActive(false);
       setButtonTxt("멈추기");
       startStreaming();
       console.log('이것도 안되면 진짜 노답');
@@ -160,7 +160,6 @@ const HomePage = () => {
   }
   
     formData.append("frame", blob, "frame.jpg");
-    if (startSendFrame) {
       console.log("startSendFrame");
       fetch("http://localhost:5000/process_face", {
         method: "POST",
@@ -172,9 +171,7 @@ const HomePage = () => {
           setResultImageUrl(objectURL);
         })
         .catch((error) => console.error("Error:", error));
-    } else {
-      console.log(startSendFrame);
-    }
+   
   };
 
   const setStreaming = () => {
@@ -269,24 +266,29 @@ const HomePage = () => {
     if (parts.length === 2) return parts.pop().split(";").shift();
   }
 
+  const Click = () => {
+    setIsVideoBoxVisible(false);
+  };
+
   return (
     <div className="Home-all">
       <div className="Topbox">
         <Top />
       </div>
       <div className="Home-contents">
-        <div className="videobox">
+        <div className="videobox" style={{ width: "840px"}}>
           <video
             ref={videoRef}
             autoPlay
             playsInline
-            style={{ width: "640px", height: "480px", display: "none" }}
+            style={{ width: "800px", height: "530px", display: isVideoBoxVisible ? 'block' : 'none' }}
+            
           />
           <canvas
             ref={canvasRef}
             style={{ display: "none" }}
-            width="640"
-            height="480"
+            width="713"
+            height="525"
           ></canvas>
           {resultImageUrl && resultImageVisible && (
             <img src={resultImageUrl} alt="Processed Image" />

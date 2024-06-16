@@ -41,7 +41,7 @@ function Login() {
       })
       .catch((error) => {
         console.error("Error occurred:", error);
-        alert("Error occurred. Please try again.");
+        alert("ID 또는 비밀번호가 올바르지 않습니다.");
       });
   };
 

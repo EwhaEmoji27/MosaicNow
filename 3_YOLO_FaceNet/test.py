@@ -246,7 +246,7 @@ def set_streaming():
 
     # 스트리밍 세팅  C:\Users\ffmpeg-2024-01-17-git-8e23ebe6f9-full_build\bin\ffmpeg.exe
     #FFmpeg = r'C:\Users\yhj01\ffmpeg\bin\ffmpeg.exe'  
-    FFmpeg = r'C:\Users\ffmpeg-2024-01-17-git-8e23ebe6f9-full_build\bin\ffmpeg.exe'
+    FFmpeg = r'D:/다운로드/ffmpeg-6.1.1-full_build/ffmpeg-6.1.1-full_build/bin/ffmpeg.exe'
     YOUTUBE_URL = 'rtmp://a.rtmp.youtube.com/live2/'
 
 
@@ -362,7 +362,7 @@ def start_streaming():
         label = labels[min_distance_index]
 
         if min_distance < 0.7:
-            name = f"User {label}"
+            name = f"{label}"
         else:
             name = "Unknown"
             frame = apply_mosaic(frame, (x1, y1), (x2, y2))

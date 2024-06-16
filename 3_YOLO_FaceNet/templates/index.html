@@ -115,7 +115,8 @@
     function sendFrame_process(blob) {
         let formData = new FormData();
         formData.append('user_id', '1');
-        formData.append('selected_user_ids[]', 1);
+        formData.append('selected_embedding_ids[]',"yoora");
+        formData.append('selected_embedding_ids[]', "hyejin");
         formData.append('frame', blob, ['frame.jpg']);
         fetch('http://127.0.0.1:5000/process_face', {
             method: 'POST',
@@ -184,7 +185,8 @@
     function sendFrame_streaming(blob) {
         let formData = new FormData();
         formData.append('user_id', '1');
-        formData.append('selected_user_ids[]', 1);
+        formData.append('selected_embedding_ids[]', "yoora");
+        formData.append('selected_embedding_ids[]', "hyejin");
         formData.append('frame', blob, ['frame.jpg']);
         fetch('http://127.0.0.1:5000/start_streaming', {
             method: 'POST',
