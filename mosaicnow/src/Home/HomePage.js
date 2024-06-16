@@ -34,7 +34,7 @@ const HomePage = () => {
   
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/users")
+      .get("http://110.9.11.9:8000/api/users")
       .then((response) => {
         console.log(response.data);
         setUserList(response.data);
@@ -161,7 +161,7 @@ const HomePage = () => {
   
     formData.append("frame", blob, "frame.jpg");
       console.log("startSendFrame");
-      fetch("http://localhost:5000/process_face", {
+      fetch("http://110.9.11.9:5000/process_face", {
         method: "POST",
         body: formData,
       })
@@ -178,7 +178,7 @@ const HomePage = () => {
     let formData = new FormData();
     formData.append("user_id", "1");
     formData.append("stream_key", "60h0-eeq6-8yh3-tktj-cx33");
-    fetch("http://localhost:5000/set_streaming", {
+    fetch("http://110.9.11.9:5000/set_streaming", {
       method: "POST",
       body: formData,
     })
@@ -209,7 +209,7 @@ const HomePage = () => {
       stopCapture(); // 캡처 중지
       let formData = new FormData();
       formData.append("user_id", "1");
-      fetch("http://localhost:5000/stop_streaming", {
+      fetch("http://110.9.11.9:5000/stop_streaming", {
         method: "POST",
         body: formData,
       })
@@ -241,7 +241,7 @@ const HomePage = () => {
     formData.append("selected_user_ids[]", 1);
     formData.append("frame", blob, ["frame.jpg"]);
     console.log('6');
-    fetch("http://localhost:5000/start_streaming", {
+    fetch("http://110.9.11.9:5000/start_streaming", {
       method: "POST",
       body: formData,
     })
