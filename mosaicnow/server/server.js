@@ -22,8 +22,8 @@ const pool = mysql.createPool({
 });
 
 app.get("/api/users", (req, res) => {
-  const directoryPath = "D:/Github/Web/EmojiYOLO/3_YOLO_FaceNet/dataset";
-
+  const directoryPath = "C:/Users/DesignPC/Documents/GitHub/EmojiYOLO/3_YOLO_FaceNet/dataset";
+  
   fs.readdir(directoryPath, (err, files) => {
     if (err) {
       return res.status(500).send("Unable to scan directory: " + err);

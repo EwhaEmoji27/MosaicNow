@@ -14,7 +14,6 @@ import axios from "axios";
 const HomePage = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  const intervalRef = useRef(null); // intervalRef 선언
   const [resultImageUrl, setResultImageUrl] = useState('');
   const [streamActive, setStreamActive] = useState(false);
   const [capturing, setCapturing] = useState(false);
@@ -45,6 +44,22 @@ const HomePage = () => {
     setUserID(userIDFromCookie);
   }, []);
 
+  
+  useEffect(() => {
+    if (curState === 1){
+      if (streamActive && capturing) {
+        captureFrameLoop_process();
+      }
+    }  
+    else if(curState === 2){
+      if (streamActive && capturing) {
+        captureFrameLoop_streaming();
+      }
+    }
+    else {
+      stopCapture();
+    }
+  }, [curState], [streamActive, capturing]);
 
   function getCookie(name) {
     const value = `; ${document.cookie}`;
@@ -60,6 +75,7 @@ const HomePage = () => {
       setCapturing(false);
       videoRef.current.srcObject = null;
       console.log("Streaming and capturing stopped.");
+      setCurState(0);
     }
   };
 
@@ -94,6 +110,9 @@ const HomePage = () => {
     canvasRef.current.toBlob(blob => {
       sendFrame_process(blob);
     }, 'image/jpeg');
+    if(curState === 1){
+      setTimeout(captureFrameLoop_process, 100); // 0.1초 간격으로 프레임 캡처
+    }
   };
 
   const sendFrame_process = (blob) => {
@@ -171,6 +190,7 @@ const HomePage = () => {
     canvasRef.current.toBlob(blob => {
       sendFrame_streaming(blob);
     }, 'image/jpeg');
+    setTimeout(captureFrameLoop_streaming, 100); // 0.1초 간격으로 프레임 캡처
   };
 
   const sendFrame_streaming = (blob) => {
@@ -204,32 +224,6 @@ const HomePage = () => {
       setSelectedUsers([...selectedUsers, user]);
     }
   };
-
-  useEffect(() => {
-    if (curState === 1){
-      if (streamActive && capturing) {
-        intervalRef.current = setInterval(() => {
-          captureFrameLoop_process();
-        }, 100);
-      }
-    }  
-    else if(curState === 2){
-      if (streamActive && capturing) {
-        intervalRef.current = setInterval(() => {
-          captureFrameLoop_streaming();
-        }, 100);
-      }
-    }
-    else {
-      console.log("0");
-      stopCapture();
-    }
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [curState, streamActive, capturing, captureFrameLoop_process, captureFrameLoop_streaming, stopCapture]);
 
   return (
     <div className="Home-all">

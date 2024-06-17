@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, redirect, jsonify, send_file, render_template
 from flask_cors import CORS
 import cv2
 from facenet_pytorch import InceptionResnetV1
@@ -7,6 +7,7 @@ import numpy as np
 import os
 import tempfile
 import subprocess
+import ssl
 
 
 
@@ -33,11 +34,11 @@ dataset_path = os.path.join(script_dir, 'dataset')
 create_directory(dataset_path)
 
 
-def load_selected_embeddings(selected_user_ids):
+def load_selected_embeddings(selected_embedding_ids):
     embeddings = []
     labels = []
-    for user_id in selected_user_ids:
-        user_folder = os.path.join(dataset_path, f"user_{user_id}")  # 사용자 ID별 폴더 경로
+    for user_id in selected_embedding_ids:
+        user_folder = os.path.join(dataset_path, user_id)  # 사용자 ID별 폴더 경로
         if not os.path.exists(user_folder):
             print(f"No data for user ID {user_id}")
             continue  # 해당 사용자 폴더가 없으면 다음 사용자로 넘어감
@@ -45,10 +46,10 @@ def load_selected_embeddings(selected_user_ids):
             if file.endswith(".npy"):  # npy 파일만 로드
                 embedding = np.load(os.path.join(user_folder, file))
                 embeddings.append(embedding)
-                labels.append(int(user_id))
+                labels.append(user_id)
     return np.array(embeddings), np.array(labels)
 
-def apply_mosaic(frame, top_left, bottom_right, factor=0.1):
+def apply_mosaic(frame, top_left, bottom_right, factor=0.05):
     x1, y1 = top_left
     x2, y2 = bottom_right
     region = frame[y1:y2, x1:x2]
@@ -60,6 +61,15 @@ def apply_mosaic(frame, top_left, bottom_right, factor=0.1):
 
 
 
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+
+
+
+
 # 사용자별 임베딩을 저장할 임시 딕셔너리
 user_embeddings = {}
 
@@ -67,6 +77,7 @@ user_embeddings = {}
 def add_face():
     # 사용자 ID 확인
     user_id = request.form['user_id']
+    face_name = request.form['face_name']
     if not user_id:
         return jsonify({'error': 'User ID is required.'}), 400
 
@@ -96,6 +107,11 @@ def add_face():
         # 얼굴에 박스 그리기
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
+
+    # user_id가 user_embeddings 딕셔너리에 없는 경우 초기 리스트 할당
+    if user_id not in user_embeddings:
+        user_embeddings[user_id] = []
+
     # 사용자별 임베딩 저장
     if embeddings:
         embeddings_np = np.array(embeddings).mean(axis=0)  
@@ -107,7 +123,7 @@ def add_face():
 
     if len(user_embeddings[user_id]) == 50:
         avg_embedding = np.mean(np.stack(user_embeddings[user_id]), axis=0)
-        user_folder = os.path.join(dataset_path, f"user_{user_id}")
+        user_folder = os.path.join(dataset_path, face_name)
         create_directory(user_folder)
         
         files = [f for f in os.listdir(user_folder) if f.endswith('.npy')]
@@ -144,18 +160,21 @@ def add_face():
 def process_face():
     # 사용자 ID 확인
     user_id = request.form['user_id']
-    selected_user_ids = request.form.getlist('selected_user_ids[]') 
+    selected_embedding_ids = request.form.getlist('selected_embedding_ids[]') 
 
     if not user_id:
         return jsonify({'error': 'User ID is required.'}), 400
 
 
     # 입력받은 사용자 ID에 해당하는 임베딩 로드
-    embeddings, labels = load_selected_embeddings(selected_user_ids)
-    embeddings = np.squeeze(embeddings, axis=1) 
+    embeddings, labels = load_selected_embeddings(selected_embedding_ids)
+    
+    if embeddings.ndim > 1:
+        embeddings = np.squeeze(embeddings, axis=1)
+
 
     if len(embeddings) == 0:
-        return jsonify({'error': 'No embeddings found for the selected user IDs.'}), 404
+        return jsonify({'error': 'No embeddings found for the selected embedding IDs.'}), 404
 
     # 이미지 파일 받기
     file = request.files['frame']
@@ -180,7 +199,7 @@ def process_face():
         label = labels[min_distance_index]
 
         if min_distance < 0.7:
-            name = f"User {label}"
+            name = f"{label}"
         else:
             name = "Unknown"
             frame = apply_mosaic(frame, (x1, y1), (x2, y2))
@@ -225,9 +244,12 @@ def set_streaming():
     if not user_id:
         return jsonify({'error': 'User ID is required.'}), 400
 
-    # 스트리밍 세팅
+    # 스트리밍 세팅  C:\Users\ffmpeg-2024-01-17-git-8e23ebe6f9-full_build\bin\ffmpeg.exe
+    #FFmpeg = r'C:\Users\yhj01\ffmpeg\bin\ffmpeg.exe'  
     FFmpeg = r'C:\Users\ffmpeg-2024-01-17-git-8e23ebe6f9-full_build\bin\ffmpeg.exe'
     YOUTUBE_URL = 'rtmp://a.rtmp.youtube.com/live2/'
+
+
     command = [
                 FFmpeg,
                 '-f', 'image2pipe',
@@ -236,6 +258,9 @@ def set_streaming():
                 '-i', '-',
                 '-f', 'lavfi',
                 '-i', 'anullsrc=r=44100:cl=stereo',  # Dummy audio generation   -> audio=마이크(HCAM01Q)
+                #'-f', 'dshow',
+                #'-rtbufsize', '5120000',
+                #'-i', 'audio=Microphone Array(Intel® Smart Sound Technology for Digital Microphones)',  # Dummy audio generation   -> audio=마이크(HCAM01Q)
                 '-acodec', 'aac',
                 '-ar', '44100',
                 '-ac', '2',
@@ -249,7 +274,8 @@ def set_streaming():
                 '-f', 'flv',
                 f"{YOUTUBE_URL}/{stream_key}"  
             ]
-    
+
+
 
     try:
         user_pipe[user_id] = subprocess.Popen(command, stdin=subprocess.PIPE)
@@ -291,7 +317,7 @@ def stop_streaming():
 def start_streaming():
     # 사용자 ID 확인
     user_id = request.form['user_id']
-    selected_user_ids = request.form.getlist('selected_user_ids[]') 
+    selected_embedding_ids = request.form.getlist('selected_embedding_ids[]') 
 
     if not user_id:
         return jsonify({'error': 'User ID is required.'}), 400 
@@ -301,13 +327,19 @@ def start_streaming():
 
 
     # 입력받은 사용자 ID에 해당하는 임베딩 로드
-    embeddings, labels = load_selected_embeddings(selected_user_ids)
-    embeddings = np.squeeze(embeddings, axis=1) 
-    if len(embeddings) == 0:
+    embeddings, labels = load_selected_embeddings(selected_embedding_ids)
+    
+
+    if embeddings.size == 0:
         return jsonify({'error': 'No embeddings found for the selected user IDs.'}), 404
 
+    # 배열의 차원을 확인하고 조건적으로 squeeze() 적용
+    if embeddings.ndim > 1 and embeddings.shape[1] == 1:
+        embeddings = np.squeeze(embeddings, axis=1)
+    elif embeddings.ndim == 1:
+        embeddings = embeddings.reshape(1, -1)  # 1차원 배열이면 2차원으로 변경
 
-    
+
     # 이미지 파일 받기
     file = request.files['frame']
     temp = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
@@ -330,7 +362,7 @@ def start_streaming():
         label = labels[min_distance_index]
 
         if min_distance < 0.7:
-            name = f"User {label}"
+            name = f"{label}"
         else:
             name = "Unknown"
             frame = apply_mosaic(frame, (x1, y1), (x2, y2))
@@ -367,5 +399,13 @@ def start_streaming():
 
 
 
+#if __name__ == '__main__':
+#    app.run(debug=True, host='0.0.0.0', port=5000)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=5000, host='0.0.0.0')
+
+#if __name__ == "__main__":
+#    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+#    ssl_context.load_cert_chain(certfile='newcert.pem', keyfile='newkey.pem', password='secret')
+#    app.run(host="0.0.0.0", port=5000, ssl_context=ssl_context)
