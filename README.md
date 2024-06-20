@@ -64,7 +64,8 @@ https://ffmpeg.org/
 
 ffmpeg 설치 후 AI_Server.py의 FFmpeg 경로를 본인의 FFmpeg 파일 경로로 변경한다.
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/d3426e5b-be54-406f-a6e5-295dcdcbd85f/74df14f7-6f4b-45d4-86fa-0e5de6815f14/Untitled.png)
+![ffmpeg](https://github.com/EwhaEmoji27/MosaicNow/assets/113421649/5172e546-3119-4a97-a04a-9f1efeefa108)
+
 
 ### 2. 모듈 설치
 
