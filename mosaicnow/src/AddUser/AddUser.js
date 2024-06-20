@@ -85,7 +85,7 @@ const AddUser = () => {
     let formData = new FormData();
     formData.append("user_id", 1);
     formData.append("frame", blob, "frame.jpg");
-    fetch("http://127.0.0.1:5000/add_face", {
+    fetch("http://110.9.11.9:5000/add_face", {
       method: "POST",
       body: formData,
     })

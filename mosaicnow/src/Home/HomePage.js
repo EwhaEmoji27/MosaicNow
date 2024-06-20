@@ -1,11 +1,9 @@
 import React, {
   useRef,
-  useContext,
   useState,
   useEffect,
   useCallback,
 } from "react";
-import ImageContext from "../ImageContext/ImageContext";
 import { Link } from "react-router-dom";
 import usericon from "./img/user_icon.png";
 import setupicon from "./img/setup.png";
@@ -16,17 +14,26 @@ import axios from "axios";
 const HomePage = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  const { resultImageUrl, setResultImageUrl } = useContext(ImageContext);
+  const intervalRef = useRef(null); // intervalRef 선언
+  const [resultImageUrl, setResultImageUrl] = useState('');
   const [streamActive, setStreamActive] = useState(false);
-  const [resultImageVisible, setResultImageVisible] = useState(false);
-  const intervalRef = useRef(null);
-  const [buttonTxt, setbuttonTxt] = useState("미리보기");
-  const [buttonNum, setbuttonNum] = useState(0);
   const [capturing, setCapturing] = useState(false);
+<<<<<<< Updated upstream
   const [previewActive, setPreviewActive] = useState(false);
   const [startsendFrame, setStartSendFrame] = useState(true);
 
   const [userList, setUserList] = useState([]);
+=======
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [userList, setUserList] = useState([]);
+  const [userID, setUserID] = useState("");
+  const [curState, setCurState] = useState(0);
+
+
+  const handleResetClick = () => {
+    window.location.reload();
+  };
+>>>>>>> Stashed changes
 
   useEffect(() => {
     axios
@@ -41,46 +48,176 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    const getUserMedia = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-        });
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          setStreamActive(true);
-        }
-      } catch (err) {
-        console.error("카메라에 연결할 수 없습니다:", err);
-        setStreamActive(false);
-      }
-    };
-
-    getUserMedia();
-
-    return () => {
-      if (videoRef.current && videoRef.current.srcObject) {
-        const tracks = videoRef.current.srcObject.getTracks();
-        tracks.forEach((track) => track.stop());
-        setStreamActive(false);
-      }
-    };
+    const userIDFromCookie = getCookie("userID");
+    setUserID(userIDFromCookie);
   }, []);
 
+<<<<<<< Updated upstream
   useEffect(() => {
     if (streamActive && (previewActive || capturing)) {
       intervalRef.current = setInterval(captureAndSendFrame, 100);
     } else {
       clearInterval(intervalRef.current);
-    }
+=======
 
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+  }
+
+  const stopCapture = () => {
+    if (streamActive || capturing) {
+      const tracks = videoRef.current.srcObject.getTracks();
+      tracks.forEach(track => track.stop());
+      setStreamActive(false);
+      setCapturing(false);
+      videoRef.current.srcObject = null;
+      console.log("Streaming and capturing stopped.");
+>>>>>>> Stashed changes
+    }
+  };
+
+<<<<<<< Updated upstream
     return () => clearInterval(intervalRef.current);
   }, [streamActive, previewActive, capturing]);
+=======
+  const process_face = () => {
+    console.log("process");
+    if (!streamActive) {
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+            setStreamActive(true);
+            setCapturing(true);
+            setCurState(1);
+          }
+        })
+        .catch(error => console.error(error));
+    } else if (capturing) {
+      setCurState(0);
+    }
+  };
+>>>>>>> Stashed changes
 
-  useEffect(() => {
-    console.log(buttonNum);
-  }, [buttonNum]);
+  const captureFrameLoop_process = () => {
+    console.log("process_loop");
+    console.log(streamActive);
+    console.log(capturing);
 
+    if (!streamActive || !capturing) {
+      return;
+    }
+    const context = canvasRef.current.getContext('2d');
+    context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+    canvasRef.current.toBlob(blob => {
+      sendFrame_process(blob);
+    }, 'image/jpeg');
+  };
+
+  const sendFrame_process = (blob) => {
+    console.log("process_send");
+    let formData = new FormData();
+    formData.append("user_id", 1);
+    if (selectedUsers) {
+      for (let i = 0; i < selectedUsers.length; i++) {
+        const user = selectedUsers[i];
+        formData.append('selected_embedding_ids[]', user);
+      }
+    } else {
+      console.error("selectedUsers is undefined");
+    }
+    formData.append("frame", blob, "frame.jpg");
+
+    fetch('http://110.9.11.9:5000/process_face', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.blob())
+    .then(blob => {
+      setResultImageUrl(URL.createObjectURL(blob)); // 처리된 이미지 업데이트
+    })
+    .catch(error => console.error('Error:', error));
+  };
+
+  const set_streaming = () => {
+    let formData = new FormData();
+    formData.append('user_id', '1');
+    formData.append('stream_key', '60h0-eeq6-8yh3-tktj-cx33');
+    fetch('http://110.9.11.9:5000/set_streaming', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.blob())
+    .then(blob => {
+      // 처리된 이미지 업데이트 (필요시)
+    })
+    .catch(error => console.error('Error:', error));
+  };
+
+  const start_streaming = () => {
+    if (!streamActive) {
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+          if (videoRef.current) {
+            set_streaming();
+            videoRef.current.srcObject = stream;
+            setStreamActive(true);
+            setCapturing(true);
+            setCurState(2);
+          }
+        })
+        .catch(error => console.error(error));
+    } else if (capturing) {
+      setCurState(0);
+      let formData = new FormData();
+      formData.append('user_id', '1');
+      fetch('http://110.9.11.9:5000/stop_streaming', {
+        method: 'POST',
+        body: formData
+      }).then(response => {
+        console.log('Streaming stopped');
+      }).catch(error => console.error('Error:', error));
+    }
+  };
+
+  const captureFrameLoop_streaming = () => {
+    if (!streamActive || !capturing) {
+      return;
+    }
+    const context = canvasRef.current.getContext('2d');
+    context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+    canvasRef.current.toBlob(blob => {
+      sendFrame_streaming(blob);
+    }, 'image/jpeg');
+  };
+
+  const sendFrame_streaming = (blob) => {
+    let formData = new FormData();
+    formData.append("user_id", 1);
+    if (selectedUsers) {
+      for (let i = 0; i < selectedUsers.length; i++) {
+        const user = selectedUsers[i];
+        formData.append('selected_embedding_ids[]', user);
+      }
+    } else {
+      console.error("selectedUsers is undefined");
+    }
+    formData.append("frame", blob, "frame.jpg");
+
+    fetch('http://110.9.11.9:5000/start_streaming', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.blob())
+    .then(blob => {
+      setResultImageUrl(URL.createObjectURL(blob)); // 처리된 이미지 업데이트
+    })
+    .catch(error => console.error('Error:', error));
+  };
+
+<<<<<<< Updated upstream
   const handlePreviewClick = useCallback(() => {
     if (!streamActive) return;
     setResultImageVisible(true);
@@ -243,6 +380,42 @@ const HomePage = () => {
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(";").shift();
   }
+=======
+  const handleUserSelection = (user) => {
+    if (selectedUsers.includes(user)) {
+      setSelectedUsers(selectedUsers.filter((selectedUser) => selectedUser !== user));
+    } else {
+      setSelectedUsers([...selectedUsers, user]);
+    }
+  };
+
+  useEffect(() => {
+    if (curState === 1){
+      if (streamActive && capturing) {
+        intervalRef.current = setInterval(() => {
+          captureFrameLoop_process();
+        }, 100);
+      }
+    }  
+    else if(curState === 2){
+      if (streamActive && capturing) {
+        intervalRef.current = setInterval(() => {
+          captureFrameLoop_streaming();
+        }, 100);
+      }
+    }
+    else {
+      console.log("0");
+      stopCapture();
+    }
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [curState, streamActive, capturing, captureFrameLoop_process, captureFrameLoop_streaming, stopCapture]);
+
+>>>>>>> Stashed changes
   return (
     <div className="Home-all">
       <div className="Topbox">
@@ -262,7 +435,7 @@ const HomePage = () => {
             width="640"
             height="480"
           ></canvas>
-          {resultImageUrl && resultImageVisible && (
+          {resultImageUrl && (
             <img src={resultImageUrl} alt="Processed Image" />
           )}
         </div>
@@ -308,8 +481,8 @@ const HomePage = () => {
           </div>
 
           <button
-            onClick={handlePreviewClick}
-            className="startProcessButton "
+            onClick={process_face}
+            className="startProcessButton"
             style={{
               height: "7%",
               width: "100%",
@@ -319,7 +492,22 @@ const HomePage = () => {
               color: "#8f8e8e",
             }}
           >
-            {buttonTxt}
+            미리보기
+          </button>
+
+          <button
+            onClick={start_streaming}
+            className="startStreamingButton"
+            style={{
+              height: "7%",
+              width: "100%",
+              fontSize: "22px",
+              border: "none",
+              fontFamily: '"Do Hyeon", sans-serif',
+              color: "#8f8e8e",
+            }}
+          >
+            시작하기
           </button>
         </div>
       </div>
