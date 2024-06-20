@@ -2,6 +2,7 @@
 로컬에서 해당 코드를 돌려보기 위해서는 아래와 같은 설정이 필요하다.
 
 
+
 ## 1. 데이터베이스 생성 및 연결
 
 이 프로젝트에서는 두 가지 테이블을 사용한다.
@@ -10,7 +11,7 @@
 
 직접 실행하기 위해서 아래 두 테이블을 생성한 뒤, 코드에 연결한다.
 
-1. users 테이블
+### users 테이블
 
 ```sql
 CREATE TABLE users (
@@ -23,7 +24,7 @@ CREATE TABLE users (
 ```
 ![Users 테이블](https://github.com/EwhaEmoji27/MosaicNow/assets/113421649/3675f168-6004-4da9-8200-2d6cff297d90)
 
-2. embeddings 테이블
+### embeddings 테이블
 
 ```sql
 CREATE TABLE embeddings (
@@ -48,9 +49,10 @@ ON DELETE CASCADE
 2️⃣ .../MosaicNow_AI_Server/AIServer.py
 
 
+
 ## 2. 웹 설정
 
-### 1. 모듈 설치
+### 모듈 설치
 
 ```jsx
 cd .../MosaicNow_Web
@@ -61,7 +63,7 @@ npm install
 
 ## 3. AI 서버 설정
 
-### 1. FFmpeg 설치
+### FFmpeg 설치
 
 https://ffmpeg.org/
 
@@ -70,7 +72,7 @@ ffmpeg 설치 후 AI_Server.py의 FFmpeg 경로를 본인의 FFmpeg 파일 경�
 ![ffmpeg](https://github.com/EwhaEmoji27/MosaicNow/assets/113421649/5172e546-3119-4a97-a04a-9f1efeefa108)
 
 
-### 2. 모듈 설치
+### 모듈 설치
 
 ```jsx
 
@@ -79,7 +81,7 @@ cd .../MosaicNow_AI_Server
 pip install -r requirements.txt
 ```
 
-### 3. YOLOv5 설치
+### YOLOv5 설치
 
 ```jsx
 
@@ -89,7 +91,8 @@ git clone https://github.com/ultralytics/yolov5.git
 ```
 
 
-## 5. 실행
+
+## 4. 실행
 
 ### 웹 프론트엔드 실행
 
