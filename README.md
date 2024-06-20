@@ -20,8 +20,7 @@ CREATE TABLE users (
     PRIMARY KEY (user_num)
 );
 ```
-
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/d3426e5b-be54-406f-a6e5-295dcdcbd85f/61682f18-76d6-41c4-abab-f409fa84b576/Untitled.png)
+![Users 테이블](https://github.com/EwhaEmoji27/MosaicNow/assets/113421649/3675f168-6004-4da9-8200-2d6cff297d90)
 
 2. embeddings 테이블
 
@@ -38,7 +37,8 @@ ON DELETE CASCADE
 ); 
 ```
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/d3426e5b-be54-406f-a6e5-295dcdcbd85f/2d209448-580c-44c3-9878-64b426ddbffc/Untitled.png)
+![Embeddings 테이블](https://github.com/EwhaEmoji27/MosaicNow/assets/113421649/530f3ec5-4eea-44a9-8a8a-2cdaaef7dbd7)
+
 
 이제 아래 두 스크립트에서 각 데이터베이스에 접근이 가능하도록 연결한다.
 
