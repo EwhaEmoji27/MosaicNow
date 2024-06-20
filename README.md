@@ -56,7 +56,7 @@ cd .../MosaicNow_Web
 npm install
 ```
 
-## 4. AI 서버 설정
+## 3. AI 서버 설정
 
 ### 1. FFmpeg 설치
 
