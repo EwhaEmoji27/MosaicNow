@@ -3,7 +3,7 @@
 
 
 
-
+<br><br>
 
 
 ## 1. 데이터베이스 생성 및 연결
@@ -55,7 +55,7 @@ ON DELETE CASCADE
 
 
 
-
+<br><br>
 ## 2. 웹 설정
 
 ### 모듈 설치
@@ -68,7 +68,7 @@ npm install
 
 
 
-
+<br><br>
 
 ## 3. AI 서버 설정
 
@@ -102,7 +102,7 @@ git clone https://github.com/ultralytics/yolov5.git
 
 
 
-
+<br><br>
 
 ## 4. 실행
 
