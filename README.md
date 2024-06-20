@@ -1,9 +1,9 @@
 # MOSAICNOW 실행
 제품 설명서는 가장 아래에 첨부되어 있다.
 (웹 주소: http://emoji27.duckdns.org/)
-
+<br>
 테스트 계정
-ID: emojitest	
+ID: emojitest	<br>
 PW: 123123
 
 로컬에서 해당 코드를 돌려보기 위해서는 아래와 같은 설정이 필요하다.
