@@ -14,7 +14,7 @@
 
 직접 실행하기 위해서 아래 두 테이블을 생성한 뒤, 코드에 연결한다.
 
-### users 테이블
+#### users 테이블
 
 ```sql
 CREATE TABLE users (
@@ -27,7 +27,7 @@ CREATE TABLE users (
 ```
 ![Users 테이블](https://github.com/EwhaEmoji27/MosaicNow/assets/113421649/3675f168-6004-4da9-8200-2d6cff297d90)
 
-### embeddings 테이블
+#### embeddings 테이블
 
 ```sql
 CREATE TABLE embeddings (
@@ -58,7 +58,7 @@ ON DELETE CASCADE
 <br><br>
 ## 2. 웹 설정
 
-### 모듈 설치
+#### 모듈 설치
 
 ```jsx
 cd .../MosaicNow_Web
@@ -72,7 +72,7 @@ npm install
 
 ## 3. AI 서버 설정
 
-### FFmpeg 설치
+#### FFmpeg 설치
 
 https://ffmpeg.org/
 
@@ -81,7 +81,7 @@ ffmpeg 설치 후 AI_Server.py의 FFmpeg 경로를 본인의 FFmpeg 파일 경�
 ![ffmpeg](https://github.com/EwhaEmoji27/MosaicNow/assets/113421649/5172e546-3119-4a97-a04a-9f1efeefa108)
 
 
-### 모듈 설치
+#### 모듈 설치
 
 ```jsx
 
@@ -90,7 +90,7 @@ cd .../MosaicNow_AI_Server
 pip install -r requirements.txt
 ```
 
-### YOLOv5 설치
+#### YOLOv5 설치
 
 ```jsx
 
@@ -106,7 +106,7 @@ git clone https://github.com/ultralytics/yolov5.git
 
 ## 4. 실행
 
-### 웹 프론트엔드 실행
+#### 웹 프론트엔드 실행
 
 ```jsx
 cd .../MosaicNow_Web
@@ -114,7 +114,7 @@ cd .../MosaicNow_Web
 npm start
 ```
 
-### 웹 서버 실행
+#### 웹 서버 실행
 
 ```jsx
 cd .../MosaicNow_Web/Web_back
@@ -122,7 +122,7 @@ cd .../MosaicNow_Web/Web_back
 node server.js
 ```
 
-### AI 서버 실행
+#### AI 서버 실행
 
 ```jsx
 cd .../MosaicNow_AI_Server
