@@ -84,5 +84,5 @@ python AIServer.py
 ```
 
 <br><br>
-##제품설명서
+## 제품설명서
 [27-E모지-제품설명서.pdf](https://github.com/user-attachments/files/15912151/27-E.-.-.pdf)
