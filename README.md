@@ -1,6 +1,7 @@
 # MOSAICNOW 실행
-로컬에서 해당 코드를 돌려보기 위해서는 아래와 같은 설정이 필요하다.
+제품 설명서는 가장 아래에 첨부되어 있다.
 
+로컬에서 해당 코드를 돌려보기 위해서는 아래와 같은 설정이 필요하다.
 
 
 <br><br>
@@ -42,55 +43,7 @@ ON DELETE CASCADE
 ); 
 ```
 
-![Embeddings 테이블](https://github.com/EwhaEmoji27/MosaicNow/assets/113421649/530f3ec5-4eea-44a9-8a8a-2cdaaef7dbd7)
-
-
-이제 아래 두 스크립트에서 각 데이터베이스에 접근이 가능하도록 연결한다.
-
-1️⃣ .../MosaicNow_Web/Web_back/WebServer.js
-
-2️⃣ .../MosaicNow_AI_Server/AIServer.py
-
-
-
-
-
-<br><br>
-## 2. 웹 설정
-
-#### 모듈 설치
-
-```jsx
-cd .../MosaicNow_Web
-
-npm install
-```
-
-
-
-<br><br>
-
-## 3. AI 서버 설정
-
-#### FFmpeg 설치
-
-https://ffmpeg.org/
-
-ffmpeg 설치 후 AI_Server.py의 FFmpeg 경로를 본인의 FFmpeg 파일 경로로 변경한다.
-
-![ffmpeg](https://github.com/EwhaEmoji27/MosaicNow/assets/113421649/5172e546-3119-4a97-a04a-9f1efeefa108)
-
-
-#### 모듈 설치
-
-```jsx
-
-cd .../MosaicNow_AI_Server
-
-pip install -r requirements.txt
-```
-
-#### YOLOv5 설치
+![Embeddings 테이블](https://github.com/EwhaEmoji27/MosaicNow/assets/113421649/530f3ec론
 
 ```jsx
 
@@ -129,3 +82,7 @@ cd .../MosaicNow_AI_Server
 
 python AIServer.py
 ```
+
+<br><br>
+##제품설명서
+[27-E모지-제품설명서.pdf](https://github.com/user-attachments/files/15912151/27-E.-.-.pdf)
