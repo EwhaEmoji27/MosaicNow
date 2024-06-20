@@ -3,6 +3,9 @@
 
 
 
+
+
+
 ## 1. 데이터베이스 생성 및 연결
 
 이 프로젝트에서는 두 가지 테이블을 사용한다.
@@ -50,6 +53,9 @@ ON DELETE CASCADE
 
 
 
+
+
+
 ## 2. 웹 설정
 
 ### 모듈 설치
@@ -59,6 +65,9 @@ cd .../MosaicNow_Web
 
 npm install
 ```
+
+
+
 
 
 ## 3. AI 서버 설정
@@ -89,6 +98,9 @@ cd .../MosaicNow_AI_Server
 
 git clone https://github.com/ultralytics/yolov5.git
 ```
+
+
+
 
 
 
