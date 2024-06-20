@@ -1,8 +1,8 @@
 # MOSAICNOW 실행
 제품 설명서는 가장 아래에 첨부되어 있다.
 (웹 주소: http://emoji27.duckdns.org/)
-<br>
-테스트 계정
+<br><br>
+테스트 계정 <br>
 ID: emojitest	<br>
 PW: 123123
 
