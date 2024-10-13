@@ -23,6 +23,11 @@ const HomePage = () => {
   const [userID, setUserID] = useState("");
   const [curState, setCurState] = useState(0);
 
+  const [audioDevices, setAudioDevices] = useState([]);
+  const [selectedAudioDevice, setSelectedAudioDevice] = useState(null);
+
+  const [microphoneDevices, setMicrophoneDevices] = useState([]);
+  const [selectedMicrophoneDevice, setSelectedMicrophoneDevice] = useState(null);
 
   const handleResetClick = () => {
     window.location.reload();
@@ -45,6 +50,37 @@ const HomePage = () => {
     setUserID(userIDFromCookie);
   }, []);
 
+  useEffect(() => {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(() => {
+        return navigator.mediaDevices.enumerateDevices();
+      })
+      .then(devices => {
+        const outputDevices = devices.filter(device => device.kind === 'audiooutput');
+        setAudioDevices(outputDevices);
+        setSelectedAudioDevice(outputDevices[0]?.deviceId || null);
+      })
+      .catch(err => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    navigator.mediaDevices.enumerateDevices()
+      .then(devices => {
+        let inputDevices = devices.filter(device => device.kind === 'audioinput');
+        setMicrophoneDevices(inputDevices);
+        setSelectedMicrophoneDevice(inputDevices[0]?.deviceId || null);
+      })
+      .catch(err => console.log(err));
+  }, []);
+  
+
+  const handleAudioDeviceChange = (event) => {
+    setSelectedAudioDevice(event.target.value);
+  };
+
+  const handleMicrophoneDeviceChange = (event) => {
+    setSelectedMicrophoneDevice(event.target.value);
+  };
 
   function getCookie(name) {
     const value = `; ${document.cookie}`;
@@ -294,6 +330,25 @@ const HomePage = () => {
               </Link>
             </button>
           </div>
+          <div className="device-selection">
+        <label htmlFor="audioDevice">오디오 출력 장치:</label>
+        <select id="audioDevice" value={selectedAudioDevice} onChange={handleAudioDeviceChange}>
+          {audioDevices.map(device => (
+            <option key={device.deviceId} value={device.deviceId}>
+              {device.label || `Device ${device.deviceId}`}
+            </option>
+          ))}
+        </select>
+<br></br>
+        <label htmlFor="microphoneDevice">오디오 입력(마이크) 장치:</label>
+        <select id="microphoneDevice" value={selectedMicrophoneDevice} onChange={handleMicrophoneDeviceChange}>
+          {microphoneDevices.map(device => (
+            <option key={device.deviceId} value={device.deviceId}>
+              {device.label || `Device ${device.deviceId}`}
+            </option>
+          ))}
+        </select>
+      </div>
 
           <button
             onClick={process_face}

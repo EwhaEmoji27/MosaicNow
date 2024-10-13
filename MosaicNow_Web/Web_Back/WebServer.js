@@ -18,7 +18,7 @@ const pool = mysql.createPool({
   port: "3306",
   user: "root",
   password: "0000",
-  database: "testDB",
+  database: "EmojiDB",
 });
 
 app.get("/api/users", (req, res) => {
