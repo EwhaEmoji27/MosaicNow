@@ -18,12 +18,6 @@ const HomePage = () => {
   const [resultImageUrl, setResultImageUrl] = useState('');
   const [streamActive, setStreamActive] = useState(false);
   const [capturing, setCapturing] = useState(false);
-<<<<<<< Updated upstream
-  const [previewActive, setPreviewActive] = useState(false);
-  const [startsendFrame, setStartSendFrame] = useState(true);
-
-  const [userList, setUserList] = useState([]);
-=======
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [userList, setUserList] = useState([]);
   const [userID, setUserID] = useState("");
@@ -33,7 +27,6 @@ const HomePage = () => {
   const handleResetClick = () => {
     window.location.reload();
   };
->>>>>>> Stashed changes
 
   useEffect(() => {
     axios
@@ -52,13 +45,6 @@ const HomePage = () => {
     setUserID(userIDFromCookie);
   }, []);
 
-<<<<<<< Updated upstream
-  useEffect(() => {
-    if (streamActive && (previewActive || capturing)) {
-      intervalRef.current = setInterval(captureAndSendFrame, 100);
-    } else {
-      clearInterval(intervalRef.current);
-=======
 
   function getCookie(name) {
     const value = `; ${document.cookie}`;
@@ -74,14 +60,9 @@ const HomePage = () => {
       setCapturing(false);
       videoRef.current.srcObject = null;
       console.log("Streaming and capturing stopped.");
->>>>>>> Stashed changes
     }
   };
 
-<<<<<<< Updated upstream
-    return () => clearInterval(intervalRef.current);
-  }, [streamActive, previewActive, capturing]);
-=======
   const process_face = () => {
     console.log("process");
     if (!streamActive) {
@@ -99,7 +80,6 @@ const HomePage = () => {
       setCurState(0);
     }
   };
->>>>>>> Stashed changes
 
   const captureFrameLoop_process = () => {
     console.log("process_loop");
@@ -217,170 +197,6 @@ const HomePage = () => {
     .catch(error => console.error('Error:', error));
   };
 
-<<<<<<< Updated upstream
-  const handlePreviewClick = useCallback(() => {
-    if (!streamActive) return;
-    setResultImageVisible(true);
-    setPreviewActive((prev) => !prev);
-
-    if (buttonNum === 0) {
-      setbuttonTxt("시작하기");
-      setbuttonNum(1);
-    } else if (buttonNum === 1) {
-      stopCapture();
-      start_streaming();
-      setStartSendFrame(false);
-      setbuttonTxt("멈추기");
-      setbuttonNum(2);
-    } else if (buttonNum === 2) {
-      setbuttonTxt("미리보기");
-      setbuttonNum(0);
-      stopCapture();
-    }
-  }, [streamActive, buttonNum]);
-  const stopCapture = () => {
-    if (streamActive) {
-      const tracks = videoRef.current.srcObject.getTracks();
-      tracks.forEach((track) => track.stop());
-      setStreamActive(false);
-      setCapturing(false);
-      videoRef.current.srcObject = null;
-      setPreviewActive(false);
-      console.log("Streaming and capturing stopped.");
-    }
-  };
-
-  const captureAndSendFrame = () => {
-    if (!canvasRef.current || !videoRef.current) {
-      console.error("Canvas or video element is not ready.");
-      return;
-    }
-    const context = canvasRef.current.getContext("2d");
-    context.drawImage(
-      videoRef.current,
-      0,
-      0,
-      canvasRef.current.width,
-      canvasRef.current.height
-    );
-    canvasRef.current.toBlob((blob) => {
-      if (previewActive || capturing) {
-        sendFrameAdd(blob);
-      }
-    }, "image/jpeg");
-  };
-
-  const sendFrameAdd = (blob) => {
-    let formData = new FormData();
-    formData.append("user_id", 1);
-    formData.append("selected_user_ids[]", 1);
-    formData.append("frame", blob, "frame.jpg");
-    if (startsendFrame === true) {
-      console.log("시작");
-      console.log("startsendFrame");
-      fetch("http://127.0.0.1:5000/process_face", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.blob())
-        .then((blob) => {
-          const objectURL = URL.createObjectURL(blob);
-          setResultImageUrl(objectURL);
-        })
-        .catch((error) => console.error("Error:", error));
-    } else {
-      console.log("멈춰야하는데?");
-      console.log(startsendFrame);
-    }
-  };
-
-  const set_streaming = (blob) => {
-    let formData = new FormData();
-    formData.append("user_id", "1");
-    formData.append("stream_key", "60h0-eeq6-8yh3-tktj-cx33");
-    fetch("http://110.9.11.9:5000/set_streaming", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.blob())
-      .then((blob) => {
-        //resultImage.src = URL.createObjectURL(blob); // 처리된 이미지 업데이트
-      })
-      .catch((error) => console.error("Error:", error));
-  };
-  const start_streaming = () => {
-    setCapturing(true);
-    if (!streamActive) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then((stream) => {
-          videoRef.srcObject = stream;
-          streamActive = true;
-          capturing = true;
-          setStreamActive(true);
-          captureFrameLoop_streaming();
-          setCapturing(true);
-          resultImageUrl.style.display = "block"; // 처리 후 영상 보여주기
-        })
-        .catch((error) => console.error(error));
-    } else if (capturing) {
-      stopCapture(); // 캡처 중지
-      let formData = new FormData();
-      formData.append("user_id", "1");
-      fetch("http://110.9.11.9:5000/stop_streaming", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => {
-          console.log("Streaming stopped");
-        })
-        .catch((error) => console.error("Error:", error));
-    }
-  };
-
-  function captureFrameLoop_streaming() {
-    if (!streamActive || !capturing) {
-      return;
-    }
-    const context = canvasRef.current.getContext("2d");
-
-    context.drawImage(videoRef, 0, 0, canvasRef.width, canvasRef.height);
-    canvasRef.toBlob((blob) => {
-      sendFrame_streaming(blob);
-    }, "image/jpeg");
-    setTimeout(captureFrameLoop_streaming, 100); // 0.1초 간격으로 프레임 캡처
-  }
-
-  function sendFrame_streaming(blob) {
-    let formData = new FormData();
-    formData.append("user_id", "1");
-    formData.append("selected_user_ids[]", 1);
-    formData.append("frame", blob, ["frame.jpg"]);
-    fetch("http://110.9.11.9:5000/start_streaming", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.blob())
-      .then((blob) => {
-        resultImageUrl.src = URL.createObjectURL(blob); // 처리된 이미지 업데이트
-      })
-      .catch((error) => console.error("Error:", error));
-  }
-
-  const [userID, setUserID] = useState("");
-
-  useEffect(() => {
-    // 페이지 로드 시 실행되는 함수
-    const userIDFromCookie = getCookie("userID");
-    setUserID(userIDFromCookie);
-  }, []);
-
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(";").shift();
-  }
-=======
   const handleUserSelection = (user) => {
     if (selectedUsers.includes(user)) {
       setSelectedUsers(selectedUsers.filter((selectedUser) => selectedUser !== user));
@@ -415,7 +231,6 @@ const HomePage = () => {
     };
   }, [curState, streamActive, capturing, captureFrameLoop_process, captureFrameLoop_streaming, stopCapture]);
 
->>>>>>> Stashed changes
   return (
     <div className="Home-all">
       <div className="Topbox">
